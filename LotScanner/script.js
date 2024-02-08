@@ -35,7 +35,7 @@ function isValidLot(value){
     // only match 8 digit strings
     var regex = /^\d{8}$/;
     var result = regex.test(value);
-    if(!result) {showSnackBarAndMessage("Invalid Lot Number, must be 8 digits");};
+    if(!result) {showAlertMessage("Invalid Lot Number, must be 8 digits");};
     return result;
 };
 /**
@@ -87,11 +87,8 @@ function setFocusFirstInput(){
     scan1Input.select()
 };
 
-function showSnackBarAndMessage(message){
-    var snackbar = document.getElementById("snackbar");
-    snackbar.innerText = message;
-    snackbar.className = "show";
-    setTimeout(() => {snackbar.className = "";}, 3000)
+function showAlertMessage(message){
+    alert(message);
 }
 
 
