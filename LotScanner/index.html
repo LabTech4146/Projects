@@ -2,12 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Lot Verification Tool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>Scan lots, if all three match cells will turn green. Otherwise cells will turn red.</header>
     <form id="form">
+        <div id="alerts">Alert messages will show here</div>
         <div class="field">
             <label for="scan1">Scan 1</label>
             <input id="scan1" name="scan1" type="text" class="pending">

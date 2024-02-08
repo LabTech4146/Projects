@@ -88,7 +88,10 @@ function setFocusFirstInput(){
 };
 
 function showAlertMessage(message){
-    alert(message);
+    var alertElement = document.getElementById("alerts");
+    alertElement.className = "show"
+    alertElement.innerText = message
+    setTimeout(function (){alertElement.className = ""}, 2900)
 }
 
 
