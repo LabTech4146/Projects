@@ -1,3 +1,5 @@
+
+// TODO how to assign global variables
 var scan1Input = ""
 var scan2Input = ""
 var scan3Input = ""
@@ -20,8 +22,6 @@ function onTabVisible(event){
         scanInputs.forEach((element) =>element.value = "");
     };
 };
-
-
 function isAllEqual(event){
     if (event.key === "Enter") {
         console.log(scan1Input.value == scan2Input.value &&
@@ -34,8 +34,10 @@ function isAllEqual(event){
 function isValidLot(value){
     // only match 8 digit strings
     var regex = /^\d{8}$/;
-    return regex.test(value);
-}
+    var result = regex.test(value);
+    if(!result) {showSnackBarAndMessage("Invalid Lot Number, must be 8 digits");};
+    return result;
+};
 /**
  * @param {Array<HTMLInputElement>} elements 
  */
@@ -84,6 +86,15 @@ function setFocusFirstInput(){
     scan1Input.focus()
     scan1Input.select()
 };
+
+function showSnackBarAndMessage(message){
+    var snackbar = document.getElementById("snackbar");
+    snackbar.innerText = message;
+    snackbar.className = "show";
+    setTimeout(() => {snackbar.className = "";}, 3000)
+}
+
+
 function scan1OnEnter(event){
     if (event.key === "Enter") {
         var scan1Value = scan1Input.value;
