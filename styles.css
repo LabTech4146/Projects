@@ -1,0 +1,23 @@
+input.yellow {
+    background-color: yellow;
+    opacity: 1.0;
+    pointer-events: all;
+}
+input.grey {
+    background-color: grey;
+    opacity: 0.8;
+    pointer-events: none;
+}
+input.green {
+    background-color: green;
+    opacity: 1.0;
+    pointer-events: all;
+}
+input.red {
+    background-color: red;
+    opacity: 1.0;
+    pointer-events: all;
+}
+div.field{
+    padding: 10px;
+}
