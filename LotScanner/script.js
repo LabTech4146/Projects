@@ -18,8 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function onTabVisible(event){
     if (document.visibilityState == "visible") {
+        scanInputs.forEach((element) => {
+            element.value = "";
+            element.disabled = false;
+            element.setAttribute("class", "")
+        });
         setFocusFirstInput();
-        scanInputs.forEach((element) =>element.value = "");
     };
 };
 function isAllEqual(event){

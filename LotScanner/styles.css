@@ -22,7 +22,12 @@ input.red {
     opacity: 1.0;
     pointer-events: all;
 }
-div.field{
-    padding: 10px;
+div.fields{
+    display: grid;
+    grid-template-columns: max-content max-content;   
+    grid-gap: 5px;
+}
+div.fields label{
+    text-align: right;
 }
 
