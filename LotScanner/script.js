@@ -90,7 +90,9 @@ function setFocusFirstInput(){
 function showAlertMessage(message){
     alert(message);
 }
-
+function setMascotImageSource(path){
+    document.getElementById("scanmascot").setAttribute("src", path);
+}
 
 function scan1OnEnter(event){
     if (event.key === "Enter") {
