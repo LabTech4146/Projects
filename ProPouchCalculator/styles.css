@@ -1,0 +1,48 @@
+body{
+    font-size: xx-large;
+}
+
+input{
+    font-size: xx-large;
+}
+
+div.centeredImage{
+    justify-content: center;
+    display: flex;
+}
+
+img{
+    padding: 10px;
+    border-radius: 20px;
+}
+
+input.yellow {
+    background-color: yellow;
+    opacity: 1.0;
+    pointer-events: all;
+}
+input.green {  
+    color: green;
+    opacity: 0.8;
+    pointer-events: none;
+    border: none;
+}
+input.red {  
+    color: red;
+    opacity: 0.8;
+    pointer-events: none;
+    border: none;
+}
+input.small{
+    font-size: medium;
+}
+
+div.fields{
+    display: grid;
+    grid-template-columns: max-content max-content;   
+    grid-gap: 5px;
+}
+div.fields label{
+    text-align: right;
+}
+
