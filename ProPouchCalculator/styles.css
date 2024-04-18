@@ -1,13 +1,13 @@
 body{
-    font-size: xx-large;
+    font-size: large;
 }
 
 input{
-    font-size: xx-large;
+    font-size: large;
 }
 
 div.centeredImage{
-    justify-content: center;
+    justify-content: left;
     display: flex;
 }
 
