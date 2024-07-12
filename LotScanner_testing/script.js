@@ -1,6 +1,6 @@
 
 // TODO how to assign global variables
-const LOT_TABLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBip5siigzOG6t4hgLW8oPKUE__qztGCqT8xhUksz-lW1l7Y2sbZwCos5dFtKjg7_O/exec?lot="
+const LOT_TABLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxuyZYJsdKEUFFfU4BpiGtg1vX3TyS-YmYe8lik4Y-8k0Wf3gnpAuZBgnp11qatqeUn/exec?lot="
 var scan1Input = ""
 var scan2Input = ""
 var scan3Input = ""
@@ -177,6 +177,7 @@ class LotTableHandler{
         var quantityIndex = columnHeaders.indexOf("quantity"); 
         var sizeIndex = columnHeaders.indexOf("size");
         var strainIndex = columnHeaders.indexOf("strain");
+        var litersProducedIndex = columnHeaders.indexOf("liters_produced")
         var table = document.getElementById("lot_builds_table");
         if (lotTableArray.length > 0) {
             // results for lot, build rows for each result
@@ -185,12 +186,22 @@ class LotTableHandler{
             for (var dataRow of lotTableArray){
                 var sizeName = dataRow[sizeIndex];
                 var quantity = dataRow[quantityIndex];
+                var litersProduced = dataRow[litersProducedIndex];
                 var tr = table.insertRow();
                 tr.className = "dataRow"
                 var td = tr.insertCell();
                 td.appendChild(document.createTextNode(sizeName))
                 td = tr.insertCell();
+                if (sizeName == "Pro"){
+                    if (litersProduced){
+                        let numPro = this.calculateProPouches(lotTableArray, sizeIndex, quantityIndex, litersProduced);
+                        td.appendChild(document.createTextNode(numPro));
+                    } else {
+                        td.appendChild(document.createTextNode("No liters produced data for this lot."));
+                    }
+                } else {
                 td.appendChild(document.createTextNode(quantity))
+                };
             };
         }
         else if (lotTableArray.length == 0) {
@@ -203,6 +214,23 @@ class LotTableHandler{
         };
         this.showTable();
     };
+    /** 
+     * @param {Array[]} lotTableArray
+     * @param {Number} litersProduced 
+     * @param {Number} quantityIndex 
+     * @param {Number} sizeIndex 
+     * @return {Number}
+      */
+    calculateProPouches(lotTableArray, sizeIndex, quantityIndex, litersProduced){
+        let hbData = lotTableArray.find((x) => x[sizeIndex] == "Homebrew");
+        let nanoData = lotTableArray.find((x) => x[sizeIndex] == "Nano");
+        var numNano = 0;
+        var numHB = 0;
+        if (hbData) {numHB = hbData[quantityIndex]};
+        if (nanoData) {numNano = nanoData[quantityIndex]};
+        let numPro = Math.floor((litersProduced - (numHB * 0.07) - (numNano * 0.35))/1.75)
+        return numPro
+    }
     setTableAsLoading(){
         document.getElementById("lotNumberSpan").innerText = "loading";
         document.getElementById("strainSpan").innerText = "...";
