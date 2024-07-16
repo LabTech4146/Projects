@@ -1,6 +1,6 @@
 
 // TODO how to assign global variables
-const LOT_TABLE_WEB_APP_BASE_URL = "https://script.google.com/macros/s/AKfycbxItr56E2Q-pgWhYB8yBig1REeoEPjXN3EPSDV6iSn6V09eCX-Q7CXgC5Qp0W3oeykI/exec"
+const LOT_TABLE_WEB_APP_BASE_URL = "https://script.google.com/macros/s/AKfycbyj_aWfMPOFgNyCbfDu3toUuDOW3Q_pVM9Q-_fFCtugrHywKXl1TXSnm9mBZGEksF-H/exec"
 const LOT_TABLE_WEB_APP_LOT_GET_PREFIX = "?lot="
 const LOT_TABLE_WEB_APP_UPDATE_GET_COMMAND = "?command=update"
 
