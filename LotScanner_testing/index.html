@@ -27,13 +27,17 @@
     </div>
     </form>
     <br>
-    <div id="tableDiv">
-        <table id="lot_builds_table" class="hidden">
+    <div id="tableDiv" class="hidden">
+        <table id="lot_builds_table">
+            <tr><th colspan="2">*Experimental*</th></tr>
             <tr><th colspan="2">Lot#<span id="lotNumberSpan"></span>, <span id="strainSpan"></span></th></tr>
             <tr id="lastHeaderRow"><th>Size</th><th>Quantity</th></tr>
             
             </tr>
         </table>
+        <p id="noLotTip" class="hidden">
+             <input type="button" value="No results? Click here to update data and refresh the table." onclick="updateSheetData()">
+        </p>
     </div>
     
     <!---<img id="scanmascot" src="../media/felix_onload.png">--->

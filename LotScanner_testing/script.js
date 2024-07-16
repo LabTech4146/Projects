@@ -1,6 +1,9 @@
 
 // TODO how to assign global variables
-const LOT_TABLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxuyZYJsdKEUFFfU4BpiGtg1vX3TyS-YmYe8lik4Y-8k0Wf3gnpAuZBgnp11qatqeUn/exec?lot="
+const LOT_TABLE_WEB_APP_BASE_URL = "https://script.google.com/macros/s/AKfycbxItr56E2Q-pgWhYB8yBig1REeoEPjXN3EPSDV6iSn6V09eCX-Q7CXgC5Qp0W3oeykI/exec"
+const LOT_TABLE_WEB_APP_LOT_GET_PREFIX = "?lot="
+const LOT_TABLE_WEB_APP_UPDATE_GET_COMMAND = "?command=update"
+
 var scan1Input = ""
 var scan2Input = ""
 var scan3Input = ""
@@ -139,6 +142,14 @@ function scan3OnEnter(event){
     };
 };
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function updateSheetData(){
+    lotTableHandler.updateLotTableDataSet();
+}
+
 class LotTableHandler{
     /**
      * 
@@ -151,10 +162,23 @@ class LotTableHandler{
     getLotTableDataAndBuildTable(){
         this.setTableAsLoading();
         var req = new XMLHttpRequest();
-        var reqURL = LOT_TABLE_WEB_APP_URL + this.lotNumber;
+        var reqURL = LOT_TABLE_WEB_APP_BASE_URL
+         + LOT_TABLE_WEB_APP_LOT_GET_PREFIX
+         + this.lotNumber;
         req.open("GET", reqURL);
         req.send();
         req.onload = this.onLotTableLoad;
+    }
+
+    async updateLotTableDataSet(){
+        //TODO test me
+        var req = new XMLHttpRequest();
+        var reqURL = LOT_TABLE_WEB_APP_BASE_URL
+            + LOT_TABLE_WEB_APP_UPDATE_GET_COMMAND
+        req.open("GET", reqURL);
+        req.send();
+        await sleep(2000)
+        req.onload = this.getLotTableDataAndBuildTable();
     }
 
     onLotTableLoad(event){
@@ -164,8 +188,9 @@ class LotTableHandler{
             if (xhr.status === 200) {
                 var lotTableArray = JSON.parse(xhr.responseText);
                 lotTableHandler.buildLotTableHTML(lotTableArray);
-            }
-          }
+            };
+          };
+        document.getElementById("lot_builds_table").classList.remove("loading");
     };
     /**
     * Build the lot table
@@ -182,6 +207,7 @@ class LotTableHandler{
         if (lotTableArray.length > 0) {
             // results for lot, build rows for each result
             var strain = lotTableArray[0][strainIndex];
+            this.hideUpdateButton();
             document.getElementById("strainSpan").innerText = strain;
             for (var dataRow of lotTableArray){
                 var sizeName = dataRow[sizeIndex];
@@ -198,6 +224,7 @@ class LotTableHandler{
                         td.appendChild(document.createTextNode(numPro));
                     } else {
                         td.appendChild(document.createTextNode("No liters produced data for this lot."));
+                        this.showUpdateButton();                        
                     }
                 } else {
                 td.appendChild(document.createTextNode(quantity))
@@ -211,8 +238,9 @@ class LotTableHandler{
             var td = tr.insertCell();
             td.setAttribute("colspan", 2)
             td.appendChild(document.createTextNode("No results for this lot"))
+            this.showUpdateButton();
         };
-        this.showTable();
+        this.showTableDiv();
     };
     /** 
      * @param {Array[]} lotTableArray
@@ -232,17 +260,24 @@ class LotTableHandler{
         return numPro
     }
     setTableAsLoading(){
-        document.getElementById("lotNumberSpan").innerText = "loading";
+        document.getElementById("lotNumberSpan").innerText = "⏳loading⏳";
+        document.getElementById("lot_builds_table").classList.add("loading")
         document.getElementById("strainSpan").innerText = "...";
         var rowsToClear = document.getElementsByClassName("dataRow");
         while (rowsToClear[0]){
             rowsToClear[0].remove();
         };
     };
-    hideTable(){
-        document.getElementById("lot_builds_table").className = "hidden";
+    hideTableDiv(){
+        document.getElementById("tableDiv").className = "hidden";
     };
-    showTable(){
-        document.getElementById("lot_builds_table").className = "";
-    }
+    showTableDiv(){
+        document.getElementById("tableDiv").className = "";
+    };
+    showUpdateButton(){
+        document.getElementById("noLotTip").className = "";
+    };
+    hideUpdateButton(){
+        document.getElementById("noLotTip").className = "hidden";
+    };
 };
