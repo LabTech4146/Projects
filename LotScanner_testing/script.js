@@ -177,7 +177,7 @@ class LotTableHandler{
             + LOT_TABLE_WEB_APP_UPDATE_GET_COMMAND
         req.open("GET", reqURL);
         req.send();
-        await sleep(2000)
+        await sleep(3000) // this may need to increase to allow load to occur
         req.onload = this.getLotTableDataAndBuildTable();
     }
 
