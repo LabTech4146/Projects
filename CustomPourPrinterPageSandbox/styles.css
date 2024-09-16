@@ -1,0 +1,17 @@
+div.fields{
+    display: grid;
+    grid-template-columns: auto auto auto auto;   
+    grid-gap: 5px;
+}
+div.fields label{
+  font-size: medium;
+}
+datalist{
+  display: none;
+}
+
+span{
+  font-size: medium;
+}
+
+

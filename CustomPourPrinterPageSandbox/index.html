@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0"> 
+    <title>Custom Pour Example</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script src="script.js"></script>
+    
+</head>
+<body>
+    <h2>
+       Custom Pour Printing - Example Layout
+    <h2>
+    <div class="fields">
+        <div class="field">
+            <label for="work-order-number">Work Order Number</label>
+            <input list="work-order-numbers" id="work-order-number" name="work-order-number">
+            <datalist id="work-order-numbers">
+                <option value="25654"></option>
+                <option value="25655"></option>
+                <option value="25656"></option>
+                <option value="25657"></option>
+            </datalist>
+        </div>
+        <div class="field">
+            <label for="pack-size">Pack Size</label>
+            <input list="standard-pack-sizes" id="pack-size" name="pack-size">
+                <datalist id="standard-pack-sizes">
+                    <option value="500mL"></option>
+                    <option value="750mL"></option>
+                    <option value="1000mL"></option>
+                    <option value="2000mL"></option>
+                </datalist>
+        </div>  
+        <div class="field">
+                <label for="printer">Printer</label>
+                <select id="printer" name="printer">
+                        <option value="Zebra ZT410 (AVL CR 3x5)">Zebra ZT410 (AVL CR 3x5)</option>
+                        <option value="Godex ZX1600i (SAN B3 SHIPPING HALL 3x2_3x3_3x5_4x4)">Godex ZX1600i (SAN B3 SHIPPING HALL 3x2_3x3_3x5_4x4)</option>
+                </select>
+                <input type="button" value="Select Other Printer">
+        </div>
+        <div class="field">
+                <label for="quantity">Quantity</label>
+                <input id="quantity" type="number" step="1" name="quantity" value="1">
+        </div>
+
+            <div class="field">
+                <input type="button" id="print-button" onclick="printLabel()" value="Print">
+                <span>Print Status: </span><span id="print-status">None</span>
+            </div>
+    </div>
+    
+</body>
+</html>
