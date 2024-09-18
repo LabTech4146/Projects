@@ -1,6 +1,6 @@
 div.fields{
     display: grid;
-    grid-template-columns: auto auto auto auto;   
+    grid-template-columns: max-content;   
     grid-gap: 5px;
 }
 div.fields label{

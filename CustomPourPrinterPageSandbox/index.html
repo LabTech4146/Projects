@@ -15,33 +15,41 @@
     <h2>
     <div class="fields">
         <div class="field">
-            <label for="work-order-number">Work Order Number</label>
+            <label for="work-order-number">Work Order*</label>
             <input list="work-order-numbers" id="work-order-number" name="work-order-number">
             <datalist id="work-order-numbers">
-                <option value="25654"></option>
-                <option value="25655"></option>
-                <option value="25656"></option>
-                <option value="25657"></option>
+                <option value="1233456, WLP001, 2 Liters, Bobs Brewing Co"></option>
+                <option value="5654645, WLP830, 0.5 Liters, Lions Roar Brewing"></option>
+                <option value="1545655, WLP001, 1 Liters, Logarithmic Beer"></option>
+                <option value="125465, WLP530, 5 Liters, Hubba Co"></option>
             </datalist>
+            <input type="button" value="Select Other Work Order">
         </div>
         <div class="field">
             <label for="pack-size">Pack Size</label>
             <input list="standard-pack-sizes" id="pack-size" name="pack-size">
                 <datalist id="standard-pack-sizes">
-                    <option value="500mL"></option>
-                    <option value="750mL"></option>
-                    <option value="1000mL"></option>
-                    <option value="2000mL"></option>
+                    <option value="500 mL"></option>
+                    <option value="750 mL"></option>
+                    <option value="1000 mL"></option>
+                    <option value="2 L"></option>
+                    <option value="10 L"></option>
                 </datalist>
+                <input type="button" value="Set Custom Pack Size">
         </div>  
         <div class="field">
                 <label for="printer">Printer</label>
                 <select id="printer" name="printer">
                         <option value="Zebra ZT410 (AVL CR 3x5)">Zebra ZT410 (AVL CR 3x5)</option>
+                        <option value="Zebra ZT410 (AVL CR 3x3)">Zebra ZT410 (AVL CR 3x3)</option>
                         <option value="Godex ZX1600i (SAN B3 SHIPPING HALL 3x2_3x3_3x5_4x4)">Godex ZX1600i (SAN B3 SHIPPING HALL 3x2_3x3_3x5_4x4)</option>
                 </select>
                 <input type="button" value="Select Other Printer">
         </div>
+        <div class="field">
+            <label for="quantity">Label</label>
+            <input id="quantity" type="text"name="label" value="zzDRAFT Custom Pou...Shipping Warehouse">
+    </div>
         <div class="field">
                 <label for="quantity">Quantity</label>
                 <input id="quantity" type="number" step="1" name="quantity" value="1">
