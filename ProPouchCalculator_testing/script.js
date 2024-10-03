@@ -2,7 +2,7 @@
 // TODO how to assign global variables
 // TODO set up with lot number loading
 
-const LOT_TABLE_WEB_APP_BASE_URL = "https://script.google.com/macros/u/1/s/AKfycbxItr56E2Q-pgWhYB8yBig1REeoEPjXN3EPSDV6iSn6V09eCX-Q7CXgC5Qp0W3oeykI/exec"
+const LOT_TABLE_WEB_APP_BASE_URL = "https://script.google.com/macros/u/1/s/AKfycbzVybkvVCKGFmzg3eXke0Hv92VhxeqMnHLkwo2Mb95alGtVx9p_vON4sBXO8jZET5ug/exec"
 const LOT_DATA_WEB_APP_GET_LITERS_PRODUCED_DATA_URL =LOT_TABLE_WEB_APP_BASE_URL + "?command=getSavedSearchDataById&Id=9756"
 const LOT_DATA_WEB_APP_GET_LITERS_WORK_ORDER_DATA_URL = LOT_TABLE_WEB_APP_BASE_URL + "?command=getSavedSearchDataById&Id=9738"
 
