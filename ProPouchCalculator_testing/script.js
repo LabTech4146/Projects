@@ -1,6 +1,13 @@
 
-// TODO how to assign global variables
-// TODO set up with lot number loading
+/**
+TODO how to assign global variables
+only load pack size data once per day, use a global var with last load date and compare
+set inputs to loading/disabled while datga loads
+show error/success of liter load - no liters produced, lot not found, success
+
+
+*/
+
 
 const LOT_TABLE_WEB_APP_BASE_URL = "https://script.google.com/macros/s/AKfycbzVybkvVCKGFmzg3eXke0Hv92VhxeqMnHLkwo2Mb95alGtVx9p_vON4sBXO8jZET5ug/exec"
 const LOT_DATA_WEB_APP_GET_LITERS_PRODUCED_DATA_URL =LOT_TABLE_WEB_APP_BASE_URL + "?command=getSavedSearchDataById&Id=9756"
@@ -86,7 +93,6 @@ class HarvestDataHandler{
     };
 
     async getLitersProducedData(){
-        //TODO test me
         var req = new XMLHttpRequest();
         var reqURL = LOT_DATA_WEB_APP_GET_LITERS_PRODUCED_DATA_URL
         req.open("GET", reqURL);
@@ -123,7 +129,6 @@ class HarvestDataHandler{
     };
     
     async getWorkOrdersData(){
-        //TODO test me
         var req = new XMLHttpRequest();
         var reqURL = LOT_DATA_WEB_APP_GET_PACK_SIZE_DATA_URL
         req.open("GET", reqURL);
