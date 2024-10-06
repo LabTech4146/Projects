@@ -1,11 +1,8 @@
 
 /**
 TODO how to assign global variables
-only load pack size data once per day, use a global var with last load date and compare
-set inputs to loading/disabled while datga loads
 show error/success of liter load - no liters produced, lot not found, success
-
-
+if lot not matched on work ordrs, show error instead of calculating as 0 for hb and nano
 */
 
 
@@ -20,19 +17,23 @@ var numberHBInput = "";
 var numberNanoInput = "";
 var calcInputs = "";
 var numberOfProOutput = "";
+var notificationOUtput = "";
 var harvestDataHandler = Object;
+var lastUpdateDateime = new Date(1995, 0, 1)
 
 document.addEventListener("DOMContentLoaded", () => {
     litersOrLotInput = document.getElementById("liters_or_lot");
     numberHBInput = document.getElementById("numberHB");
     numberNanoInput = document.getElementById("numberNano");
     numberOfProOutput = document.getElementById("numberPro");
+    notificationOutput = document.getElementById("notification")
     calcInputs = [litersOrLotInput, numberHBInput, numberNanoInput];
     litersOrLotInput.addEventListener("keyup", processLitersOrLotInput);
     numberHBInput.addEventListener("keyup", calculateProPouches);
     numberNanoInput.addEventListener("keyup", calculateProPouches);
     document.addEventListener("visibilitychange", onTabVisible);
     harvestDataHandler = new HarvestDataHandler();
+
 });
 
 function onTabVisible(event){
@@ -54,6 +55,7 @@ function showAlertMessage(message){
 }
 function calculateProPouches(event){
     //floor("liters produced"-("number of HB"x0.07)-("number of Nano"x0.35))/1.75)
+    notificationOUtput.value = "";
     var litersProduced = parseFloat(litersOrLotInput.value);
     var numberOfHomebrew = parseInt(numberHBInput.value);
     var numberOfNano = parseInt(numberNanoInput.value);
@@ -69,6 +71,7 @@ function calculateProPouches(event){
 };
 function processLitersOrLotInput(event){
     var literOrLotInputValue = litersOrLotInput.value;
+    notificationOUtput.value = "";
     if (isValidLot(literOrLotInputValue)){
         harvestDataHandler.refreshAndSetLot(literOrLotInputValue);
     }
@@ -89,6 +92,7 @@ class HarvestDataHandler{
      */
     refreshAndSetLot(lotNumber){
         this.lotNumber = lotNumber;
+        this.setPageToLoadingState();
         this.getLitersProducedData();
     };
 
@@ -121,10 +125,24 @@ class HarvestDataHandler{
         var data = lotTableArray.data;
         var lotIndex = columnHeaders.indexOf("lot"); 
         var litersProducedIndex = columnHeaders.indexOf("liters_produced");
-        var lotRow = data.filter((x)=> x[lotIndex] == this.lotNumber);
+        var lotRows = data.filter((x)=> x[lotIndex] == this.lotNumber);
+        if (lotRows.length > 0)
+            {var lotRow = lotRows[0];
+            } else {
+                //TODO create error reporting and clear inputs
+                this.setPageToLoadedState();
+                return;
+            };
         var litersProduced = parseFloat(lotRow[litersProducedIndex]);
         this.litersProduced = litersProduced;
-        this.getWorkOrdersData();
+        var hoursSinceLastUpdate = (Date.now() - lastUpdateDateime)/1000/60/60
+        if( hoursSinceLastUpdate > 1){
+            console.log(hoursSinceLastUpdate)
+            this.getWorkOrdersData();
+        } else{
+            this.getPackSizesFromTableData();
+        }
+        
         
     };
     
@@ -141,17 +159,20 @@ class HarvestDataHandler{
         let xhr = event.currentTarget
         if (xhr.readyState === xhr.DONE) {
             if (xhr.status === 200) {
+                lastUpdateDateime = Date.now();
                 var lotTableArray = JSON.parse(xhr.responseText);
-                harvestDataHandler.getPackSizesFromTableData(lotTableArray);
+                harvestDataHandler.packSizeTableData = lotTableArray;
+                harvestDataHandler.getPackSizesFromTableData();
             };
           };
     };
-    /**
+    
+    getPackSizesFromTableData(){
+        /**
     * Build the lot table
-    * @param {{columns: string[]; data: string[][]}} lotTableArray 
+    * @type {{columns: string[]; data: string[][]}} lotTableArray 
     */
-    getPackSizesFromTableData(lotTableArray){
-        console.log(lotTableArray);
+        var lotTableArray = this.packSizeTableData;
         var columnHeaders = lotTableArray.columns;
         var data = lotTableArray.data;
         var lotIndex = columnHeaders.indexOf("lot"); 
@@ -165,8 +186,8 @@ class HarvestDataHandler{
             if (itemName.endsWith("Nano")){this.numNano = parseInt(lotRow[quantityIndex])}
             else if (itemName.endsWith("HB")){this.numHB = parseInt(lotRow[quantityIndex])}
         };
-        this.calculateProPouches()
-        
+        this.calculateProPouches();
+        this.setPageToLoadedState();
     };
 
     calculateProPouches(){
@@ -175,7 +196,23 @@ class HarvestDataHandler{
         numberHBInput.value = this.numHB
         numberNanoInput.value = this.numNano
         numberOfProOutput.value = this.numPro
+        notificationOUtput.value = `Lot#${this.lotNumber}`
     };
+
+    setPageToLoadingState(){
+        for(var input of calcInputs){
+            input.setAttribute("class", "loading");
+            input.value = "loading...";
+        };
+    };
+    setPageToLoadedState(){
+        for(var input of calcInputs){
+            input.setAttribute("class", "pending");
+        }
+        numberOfProOutput.setAttribute("class", "green")
+    }
+
+
 };
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

@@ -19,6 +19,11 @@ img{
     padding: 10px;
     border-radius: 20px;
 }
+input.grey {
+    background-color: grey;
+    opacity: 0.8;
+    pointer-events: none;
+}
 
 input.yellow {
     background-color: yellow;
@@ -53,6 +58,18 @@ div.field{
 
 div.field label{
     text-align: right;
+}
+
+.loading {
+    opacity: 1;
+    background-color: yellow;
+    pointer-events: none;
+    animation: fade 2s infinite linear;
+}
+
+@keyframes fade {
+  0%,100% { opacity: 0 }
+  50% { opacity: 1 }
 }
 
 
