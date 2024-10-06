@@ -37,10 +37,12 @@ input.green {
     border: none;
 }
 input.red {  
-    color: red;
-    opacity: 0.8;
     pointer-events: none;
     border: none;
+}
+.red {
+    color: red;
+    opacity: 0.8;
 }
 input.small{
     font-size: medium;
