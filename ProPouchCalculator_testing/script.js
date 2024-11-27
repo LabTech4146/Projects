@@ -165,7 +165,7 @@ class HarvestDataHandler{
     };
 
     calculateProPouches(){
-        let numPro = Math.floor((this.litersProduced - (this.numHB * 0.07) - (this.numNano * 0.35))/1.75)
+        let numPro = Math.floor((this.litersProduced - (this.numHB * 0.07) - (this.numNano * 0.35))/1.75) + 1
         numberHBInput.value = numHB
         numberNanoInput.value = numNano
         numberOfProOutput.value = numPro
