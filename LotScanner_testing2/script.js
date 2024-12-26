@@ -22,10 +22,15 @@ document.addEventListener("DOMContentLoaded", () => {
     scan1Input.addEventListener("keyup", scan1OnEnter);
     scan2Input.addEventListener("keyup", scan2OnEnter);
     scan3Input.addEventListener("keyup", scan3OnEnter);
+    document.addEventListener("resume", onResume)
     document.addEventListener("visibilitychange", onTabVisible)
     lotTableHandler = new LotTableHandler();
     onTabVisible();
 });
+
+function onResume() {
+    showAlertMessage("Resumed");
+}
 
 function onTabVisible(event){
     if (document.visibilityState == "visible") {
