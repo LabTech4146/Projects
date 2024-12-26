@@ -50,7 +50,7 @@ function isValidLot(value){
     // only match 8 digit strings
     var regex = /^\d{8}$/;
     var result = regex.test(value);
-    if(!result) {showAlertMessage(`Invalid Lot Number, got ${value}`);};
+    if(!result) {showAlertMessage("Invalid Lot Number, must be 8 digits");};
     return result;
 };
 /**
@@ -98,8 +98,8 @@ function setClassYellowAndEnable(element){
     return element;
 };
 function setFocusFirstInput(){
+    scan1Input.blur()
     scan1Input.focus()
-    scan1Input.select()
 };
 
 function showAlertMessage(message){
@@ -111,11 +111,8 @@ function setMascotImageSource(path){
 
 function scan1OnEnter(event){
     if (event.key === "Enter") {
-        var scan1Value = scan1Input.value.trim();
-        if (scan1Value === "") {
-            ;
-        }
-        else if (isValidLot(scan1Value)) {
+        var scan1Value = scan1Input.value;
+        if (isValidLot(scan1Value)) {
             var lot = scan1Value;
             lotTableHandler.setLot(lot);
             lotTableHandler.getLotTableDataAndBuildTable();
