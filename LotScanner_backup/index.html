@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=2.0"> 
     <title>Lot Verification Tool</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 </head>
 <body>
     <div>
@@ -24,22 +23,9 @@
         
             <label for="scan3">Pouch</label>
             <input id="scan3" name="scan3" type="text" class="pending">
-    </div>
+        
     </form>
-    <br>
-    <div id="tableDiv" class="hidden">
-        <table id="lot_builds_table">
-            <tr><th colspan="2">*Experimental*</th></tr>
-            <tr><th colspan="2">Lot#<span id="lotNumberSpan"></span>, <span id="strainSpan"></span></th></tr>
-            <tr id="lastHeaderRow"><th>Size</th><th>Quantity</th></tr>
-            
-            </tr>
-        </table>
-        <p id="noLotTip" class="hidden">
-             <input type="button" value="No results? Click here to update data and refresh the table." onclick="updateSheetData()">
-        </p>
-    </div>
-    
+    <div>
     <!---<img id="scanmascot" src="../media/felix_onload.png">--->
     <script src="script.js"></script>
 </body>
