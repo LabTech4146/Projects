@@ -50,7 +50,7 @@ function isValidLot(value){
     // only match 8 digit strings
     var regex = /^\d{8}$/;
     var result = regex.test(value);
-    if(!result) {showAlertMessage("Invalid Lot Number, must be 8 digits");};
+    if(!result) {showAlertMessage(`Invalid Lot Number, got ${value}`);};
     return result;
 };
 /**
