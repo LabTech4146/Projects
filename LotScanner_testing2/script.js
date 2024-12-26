@@ -22,15 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
     scan1Input.addEventListener("keyup", scan1OnEnter);
     scan2Input.addEventListener("keyup", scan2OnEnter);
     scan3Input.addEventListener("keyup", scan3OnEnter);
-    document.addEventListener("resume", onResume)
     document.addEventListener("visibilitychange", onTabVisible)
     lotTableHandler = new LotTableHandler();
     onTabVisible();
 });
-
-function onResume() {
-    showAlertMessage("Resumed");
-}
 
 function onTabVisible(event){
     if (document.visibilityState == "visible") {
@@ -117,7 +112,10 @@ function setMascotImageSource(path){
 function scan1OnEnter(event){
     if (event.key === "Enter") {
         var scan1Value = scan1Input.value.trim();
-        if (isValidLot(scan1Value)) {
+        if (scan1Value === "") {
+            ;
+        }
+        else if (isValidLot(scan1Value)) {
             var lot = scan1Value;
             lotTableHandler.setLot(lot);
             lotTableHandler.getLotTableDataAndBuildTable();
