@@ -25,7 +25,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("visibilitychange", onTabVisible)
     lotTableHandler = new LotTableHandler();
     onTabVisible();
+    setInterval(androidScanFocusFix, 500)
 });
+
+function androidScanFocusFix(){
+    if (!scan1Input.disabled){
+        scan1Input.blur();
+        scan1Input.focus();
+    }
+}
 
 function onTabVisible(event){
     if (document.visibilityState == "visible") {
