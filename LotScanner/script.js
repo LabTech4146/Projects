@@ -12,6 +12,8 @@ var scan2Input = ""
 var scan3Input = ""
 var scanInputs = ""
 var lotTableHandler = Object;
+var successAudio = new Audio("success.mp3")
+var failAudio = new Audio("fail.mp3")
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -73,11 +75,13 @@ function isAllSameValue(elements) {
 };
 function runUnmatchedScanRoutine(){
     scanInputs.forEach(setClassRedClearAndEnable);
+    failAudio.play();
     setFocusFirstInput();
 };
 function runMatchedScanRoutine(){
     scanInputs.forEach(setClassGreenClearAndEnable);
     setFocusFirstInput();
+    successAudio.play();
 };
 /**
  * @param {HTMLInputElement} element 
