@@ -1,10 +1,7 @@
 body{
     font-size: xx-large;
 }
-div.column{
-  float: left;
-  width: 50%;
-}
+
 input.yellow {
     background-color: yellow;
     opacity: 1.0;
