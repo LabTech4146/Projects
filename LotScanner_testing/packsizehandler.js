@@ -10,6 +10,7 @@ const LOT_DATA_WEB_APP_GET_LITERS_PRODUCED_DATA_URL =LOT_TABLE_WEB_APP_BASE_URL 
 const LOT_DATA_WEB_APP_GET_PACK_SIZE_DATA_URL = LOT_TABLE_WEB_APP_BASE_URL + "?command=getSavedSearchDataById&Id=11955"
 
 
+class _NoLitersProducedError extends Error {}
 
 class _PackSizeDataHandler{
     
@@ -143,6 +144,7 @@ class _LitersProducedDataHandler{
 
         /**@type {{columns: string[]; data: string[][]}} */
         this._pack_size_data;
+        this._retry_counter = 0
           
     }
 
@@ -175,7 +177,7 @@ class _LitersProducedDataHandler{
     /**
      * Return the liters produced for agive lot.
      * @param {Number | string} lot The lot number to find pack sizes for
-     * @returns {Promise<Number>} the liters produced for the lot
+     * @returns {Promise<Number | "">} the liters produced for the lot, will be "" if blank
      */
     async get_liters_for_lot(lot){
         
@@ -192,7 +194,7 @@ class _LitersProducedDataHandler{
 
         if(lot_rows.length < 1){
 
-            throw new Error(`No liters produced data found for lot# ${lot}`);
+            throw new Error(`No liters produced record found for lot# ${lot}`);
 
         } else if(lot_rows.length === 1) {
 
@@ -206,17 +208,24 @@ class _LitersProducedDataHandler{
     };
 
     /**
-     * Return the liters produced for lot, or throw error if blank.
+     * Return the liters produced for lot, "" if empty.
      * @param {string[]} lot_row data row matching lot
-     * @returns {Number} the number of liters produced
+     * @returns {Number | ""} the number of liters produced
      */
-    _get_liters_from_lot_row(lot_row) {
+    async _get_liters_from_lot_row(lot_row) {
 
         let liters_produced = lot_row[this.ltrs_index];
 
         if(liters_produced === ""){
-
-            throw new Error(`No liters entered for lot ${this.lot}`);
+            
+            await this._fetch_and_init_table()
+            this._retry_counter += 1
+            if (this._retry_counter == 1){
+                return await this.get_liters_for_lot(this.lot)
+            } else {
+                this._retry_counter = 0
+                return ""
+            }
             
         };
 
@@ -230,6 +239,7 @@ class PackSizeHandler{
     /**
      * Given a lot, determine the number of pro pouches.
      * @param {string | Number} lot_number The lot number to calculate for.
+     * @returns {Number | "No liters produced entered for this lot."} Number of pouches or "No liters produced entered for this lot." if value is blank.
      */
     async calculate_pro_pouches_from_lot(lot_number){
         
@@ -238,23 +248,31 @@ class PackSizeHandler{
         let liters_produced = 
             await _litersProducedDataHandler.get_liters_for_lot(this.lot_number);
         
-        let {num_hb, num_nano} = 
+        if (liters_produced !== "") {
+
+            let {num_hb, num_nano} = 
             await _packSizeDataHandler.get_pack_sizes_for_lot(this.lot_number);
 
-        let num_pro = Math.floor(
-            (liters_produced
-                 - (num_hb * 0.07)
-                 - (num_nano * 0.35)
-            )
-            /1.75
-            + 1);
-        
+            var num_pro = Math.floor(
+                (liters_produced
+                    - (num_hb * 0.07)
+                    - (num_nano * 0.35)
+                )
+                /1.75
+                + 1);
+
+        } else {
+
+            var num_pro = "No liters produced entered for this lot."
+
+        }
+
         return num_pro
     };
     /**
      * Return the pack sizes for a given lot.
      * @param {string} lot_number the lot number to find pack sizes for
-     * @returns {Promise<{num_hb: Number; num_nano: Number, num_pro: Number}>}
+     * @returns {Promise<{num_hb: Number; num_nano: Number, num_pro: Number | "No liters produced entered for this lot."}>}
      */
     async get_pack_sizes_from_lot(lot_number){
 
@@ -277,7 +295,7 @@ class PackSizeHandler{
     /**
      * Return all data needed for table building
      * @param {string} lot_number the lot number to get the table data for
-     * @returns {Promise<{num_hb: Number; num_nano: Number, num_pro: Number, strain: String}>}
+     * @returns {Promise<{num_hb: Number; num_nano: Number, num_pro: Number | "No liters produced entered for this lot.", strain: String}>}
      */
 
     async get_table_variables_from_lot(lot_number){

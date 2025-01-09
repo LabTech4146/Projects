@@ -200,7 +200,7 @@ class LotTableHandler{
                     
                     var sizeName = keyNameLookup[key];
                     var quantity = lotTableData[key];    
-                    if (quantity > 0) {
+                    if (quantity > 0 | quantity === "No liters produced entered for this lot.") {
 
                         var tr = table.insertRow();
                         tr.className = "dataRow";
