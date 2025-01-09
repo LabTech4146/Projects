@@ -1,0 +1,64 @@
+body{
+    font-size: xx-large;
+}
+
+input.yellow {
+    background-color: yellow;
+    opacity: 1.0;
+    pointer-events: all;
+}
+input.grey {
+    background-color: grey;
+    opacity: 0.8;
+    pointer-events: none;
+}
+input.green {
+    background-color: green;
+    opacity: 1.0;
+    pointer-events: all;
+}
+input.red {
+    background-color: red;
+    opacity: 1.0;
+    pointer-events: all;
+}
+div.fields{
+    display: grid;
+    grid-template-columns: max-content max-content;   
+    grid-gap: 5px;
+}
+div.fields label{
+    text-align: right;
+}
+table, th, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th{
+    background-color: orange;
+  }
+  tr:nth-child(even){
+    background-color: rgb(241, 193, 102);
+  }
+  tr:nth-child(odd){
+    background-color: rgb(245, 220, 175);
+  }
+  td{
+    text-align: center;
+  }
+
+  .loading {
+    opacity: 1;
+    animation: fade 2s infinite linear;
+}
+
+
+@keyframes fade {
+  0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+}
+
+.hidden{
+    display: none;
+}
+
