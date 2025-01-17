@@ -19,6 +19,11 @@ img{
     padding: 10px;
     border-radius: 20px;
 }
+input.grey {
+    background-color: grey;
+    opacity: 0.8;
+    pointer-events: none;
+}
 
 input.yellow {
     background-color: yellow;
@@ -32,10 +37,12 @@ input.green {
     border: none;
 }
 input.red {  
-    color: red;
-    opacity: 0.8;
     pointer-events: none;
     border: none;
+}
+.red {
+    color: red;
+    opacity: 0.8;
 }
 input.small{
     font-size: medium;
@@ -43,10 +50,29 @@ input.small{
 
 div.fields{
     display: grid;
-    grid-template-columns: max-content max-content;   
+    grid-template-columns: max-content;
     grid-gap: 5px;
 }
-div.fields label{
+
+div.field{
     text-align: right;
 }
+
+div.field label{
+    text-align: right;
+}
+
+.loading {
+    opacity: 1;
+    background-color: yellow;
+    pointer-events: none;
+    animation: fade 2s infinite linear;
+}
+
+@keyframes fade {
+  0%,100% { opacity: 0 }
+  50% { opacity: 1 }
+}
+
+
 

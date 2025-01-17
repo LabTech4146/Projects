@@ -12,20 +12,26 @@
     </h2>
     <form id="form">
     <div class="fields">
-        
-            <label for="litersProduced">Liters Produced:</label>
-            <input id="litersProduced" name="litersProduced" type="text" class="pending">
-        
-        
-            <label for="numberHB">Number of Homebrew:</label>
-            <input id="numberHB" name="numberHB" type="text" class="pending">
-        
-        
+        <div class="field">
+            <label for="liters_or_lot">Liters or Lot:</label>
+            <input id="liters_or_lot" name="liters_or_lot" type="text">
+        </div>
+        <div class="field">
+                <label for="numberHB">Number of Homebrew:</label>
+                <input id="numberHB" name="numberHB" type="text" class="pending">
+        </div>
+        <div class="field">
             <label for="numberNano">Number of Nano:</label>
             <input id="numberNano" name="numberNano" type="text" class="pending">
+        </div>
 
-            <label for="numberPro">Number of Pro:</label>
+        <div class="field">
+            <label for="numberPro">Number of Pro Labels:</label>
             <input id="numberPro" name="numberPro" type="text" class="green" tabindex="-1">
+        </div>
+        <div class="field">
+            <p id="notification" name="notification" type="text" class="green"></p>
+        </div>
         
     </form>
     </div>

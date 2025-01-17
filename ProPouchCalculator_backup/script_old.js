@@ -1,21 +1,8 @@
 
 /**
-TODO works ok, could be refactored
-how to make python web server connected to scale that does all this calculation
-when lot number is scanned while vessel is stable on scale. 
-Tab is opened and liters produced are entered
-json table of netsuite data is polled using netsuite web app
-liters produced is used with todays pull of pack size json
-pro pouches calulated
-labels printed out of ppng pro printer
-blue bin stickers printed out
-
-need
-python server
-    talks to scale
-    serves webpage on localhost
-    runs selenium to input liters produced data
-    runs selenium to create print requests
+TODO how to assign global variables
+show error/success of liter load - no liters produced, lot not found, success
+if lot not matched on work ordrs, show error instead of calculating as 0 for hb and nano
 */
 
 
@@ -63,12 +50,12 @@ function showAlertMessage(message){
     alert(message);
 }
 function calculateProPouches(event){
-    //floor("liters produced"-("number of HB"x0.07)-("number of Nano"x0.35))/1.73) + 1
-    notificationOutput.innerHTML = "";
+    //floor("liters produced"-("number of HB"x0.07)-("number of Nano"x0.35))/1.75)
+    notificationOutput.value = "";
     var litersProduced = parseFloat(litersOrLotInput.value);
     var numberOfHomebrew = parseInt(numberHBInput.value);
     var numberOfNano = parseInt(numberNanoInput.value);
-    var numberOfPro = Math.floor((litersProduced - (numberOfHomebrew * .07)-(numberOfNano * .35))/1.73) + 1;
+    var numberOfPro = Math.floor((litersProduced - (numberOfHomebrew * .07)-(numberOfNano * .35))/1.75);
     numberOfProOutput.value = numberOfPro;
     if(isNaN(numberOfPro)){
         numberOfProOutput.setAttribute("class", "red");        
@@ -80,7 +67,7 @@ function calculateProPouches(event){
 };
 function processLitersOrLotInput(event){
     var literOrLotInputValue = litersOrLotInput.value;
-    notificationOutput.innerHTML = "";
+    notificationOutput.value = "";
     if (isValidLot(literOrLotInputValue)){
         harvestDataHandler.refreshAndSetLot(literOrLotInputValue);
     }
@@ -102,42 +89,52 @@ class HarvestDataHandler{
     refreshAndSetLot(lotNumber){
         this.lotNumber = lotNumber;
         this.setPageToLoadingState();
-        this.getLitersProducedDataPromise();
+        this.getLitersProducedData();
     };
 
-    getLitersProducedDataPromise(){
-        fetch(LOT_DATA_WEB_APP_GET_LITERS_PRODUCED_DATA_URL)
-            .then(response => response.json())
-            .then(litersProducedJSON => this.getLitersProducedFromTable(litersProducedJSON))
-            .catch(e => this.setPageErrorState(e))
+    async getLitersProducedData(){
+        var req = new XMLHttpRequest();
+        var reqURL = LOT_DATA_WEB_APP_GET_LITERS_PRODUCED_DATA_URL
+        req.open("GET", reqURL);
+        req.send();
+        //await sleep(3000) // this may need to increase to allow load to occur 
+        req.onload = this.onLitersProducedLoad;
     }
 
+    onLitersProducedLoad(event){
+        let xhr = event.currentTarget
+        if (xhr.readyState === xhr.DONE) {
+            if (xhr.status === 200) {
+                var lotTableArray = JSON.parse(xhr.responseText);
+                harvestDataHandler.getLitersProducedFromTable(lotTableArray);
+            };
+          };
+    };
 
     /**
     * Build the lot table
-    * @param {{columns: string[]; data: string[][]}} litersProducedJSON 
+    * @param {{columns: string[]; data: string[][]}} lotTableArray 
     */
-    getLitersProducedFromTable(litersProducedJSON){
-        this.litersProducedJSON = litersProducedJSON
-        var columnHeaders = litersProducedJSON.columns;
-        var data = litersProducedJSON.data;
+    getLitersProducedFromTable(lotTableArray){
+        console.log(lotTableArray)
+        var columnHeaders = lotTableArray.columns;
+        var data = lotTableArray.data;
         var lotIndex = columnHeaders.indexOf("lot"); 
         var litersProducedIndex = columnHeaders.indexOf("liters_produced");
         var lotRows = data.filter((x)=> x[lotIndex] == this.lotNumber);
         if (lotRows.length > 0)
             {var lotRow = lotRows[0];
             } else {
-                throw new Error(`Lot# ${this.lotNumber} not found among liters produced records`);
+                //TODO create error reporting and clear inputs
+                this.setPageToLoadedState();
+                return;
             };
         var litersProduced = parseFloat(lotRow[litersProducedIndex]);
-        if(isNaN(litersProduced)){
-            throw new Error(`No liters produced entered for lot# ${this.lotNumber}`);
-        }
         this.litersProduced = litersProduced;
         var hoursSinceLastUpdate = (Date.now() - lastUpdateDateime)/1000/60/60
         if( hoursSinceLastUpdate > 1){
             console.log(hoursSinceLastUpdate)
-            this.getWorkOrdersDataPromise();
+            this.getWorkOrdersData();
         } else{
             this.getPackSizesFromTableData();
         }
@@ -145,31 +142,41 @@ class HarvestDataHandler{
         
     };
     
-    getWorkOrdersDataPromise(){
-        fetch(LOT_DATA_WEB_APP_GET_PACK_SIZE_DATA_URL)
-            .then(response => response.json())
-            .then(packSizeJSON => this.getPackSizesFromTableData(packSizeJSON))
-            .catch(e => this.setPageErrorState(e));
-    };
+    async getWorkOrdersData(){
+        var req = new XMLHttpRequest();
+        var reqURL = LOT_DATA_WEB_APP_GET_PACK_SIZE_DATA_URL
+        req.open("GET", reqURL);
+        req.send();
+        //await sleep(3000) // this may need to increase to allow load to occur 
+        req.onload = this.onWorkOrdersLoad;
+    }
 
-    getPackSizesFromTableData(packSizeJSON){
+    onWorkOrdersLoad(event){
+        let xhr = event.currentTarget
+        if (xhr.readyState === xhr.DONE) {
+            if (xhr.status === 200) {
+                lastUpdateDateime = Date.now();
+                var lotTableArray = JSON.parse(xhr.responseText);
+                harvestDataHandler.packSizeTableData = lotTableArray;
+                harvestDataHandler.getPackSizesFromTableData();
+            };
+          };
+    };
+    
+    getPackSizesFromTableData(){
         /**
     * Build the lot table
     * @type {{columns: string[]; data: string[][]}} lotTableArray 
     */
-        this.packSizeJSON = packSizeJSON
-        var columnHeaders = packSizeJSON.columns;
-        var data = packSizeJSON.data;
+        var lotTableArray = this.packSizeTableData;
+        var columnHeaders = lotTableArray.columns;
+        var data = lotTableArray.data;
         var lotIndex = columnHeaders.indexOf("lot"); 
         var quantityIndex = columnHeaders.indexOf("quantity");
         var itemNameIndex = columnHeaders.indexOf("item_name");
         var lotRows = data.filter((x)=> x[lotIndex] == this.lotNumber);
         this.numHB = 0;
         this.numNano = 0;
-        if(lotRows.length < 1){
-            throw new Error(`No PPNG work orders found for lot# ${this.lotNumber}`);
-            
-        };
         for (var lotRow of lotRows){
             var itemName = lotRow[itemNameIndex];
             if (itemName.endsWith("Nano")){this.numNano = parseInt(lotRow[quantityIndex])}
@@ -180,13 +187,12 @@ class HarvestDataHandler{
     };
 
     calculateProPouches(){
-        this.numPro = Math.floor((this.litersProduced - (this.numHB * 0.07) - (this.numNano * 0.35))/1.73) + 1
+        this.numPro = Math.floor((this.litersProduced - (this.numHB * 0.07) - (this.numNano * 0.35))/1.75)
         litersOrLotInput.value = this.litersProduced
         numberHBInput.value = this.numHB
         numberNanoInput.value = this.numNano
         numberOfProOutput.value = this.numPro
-        notificationOutput.setAttribute("class", "green")
-        notificationOutput.innerHTML = `Lot# ${this.lotNumber}`
+        notificationOUtput.value = `Lot#${this.lotNumber}`
     };
 
     setPageToLoadingState(){
@@ -200,16 +206,6 @@ class HarvestDataHandler{
             input.setAttribute("class", "pending");
         }
         numberOfProOutput.setAttribute("class", "green")
-    }
-    setPageErrorState(e){
-        calcInputs.forEach((x) => {
-            x.setAttribute("class", "pending");
-            x.value = "";
-        });
-        numberOfProOutput.value = "";
-        notificationOutput.setAttribute("class", "red");
-        notificationOutput.innerHTML = e
-
     }
 
 
