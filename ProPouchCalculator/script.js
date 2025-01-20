@@ -32,7 +32,7 @@ var numberOfProOutput = document.getElementById("numberPro");
 var notificationOutput = document.getElementById("notification")
 var calcInputs = [litersOrLotInput, numberHBInput, numberNanoInput];
 var harvestDataHandler = Object;
-var lastUpdateDateime = new Date(1995, 0, 1)
+
 
 document.addEventListener("DOMContentLoaded", () => {
   //  litersOrLotInput = document.getElementById("liters_or_lot");
@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     numberNanoInput.addEventListener("keyup", calculateProPouches);
     document.addEventListener("visibilitychange", onTabVisible);
     harvestDataHandler = new HarvestDataHandler();
-
 });
 
 function onTabVisible(event){
@@ -97,6 +96,9 @@ function isValidLot(value){
     return result;
 };
 class HarvestDataHandler{
+    constructor(){
+        this.lastUpdateDateTime = new Date(1995, 0, 1);
+    }
     /**
      * 
      * @param {String} lotNumber 
@@ -136,12 +138,12 @@ class HarvestDataHandler{
             throw new Error(`No liters produced entered for lot# ${this.lotNumber}`);
         }
         this.litersProduced = litersProduced;
-        var hoursSinceLastUpdate = (Date.now() - lastUpdateDateime)/1000/60/60
+        var hoursSinceLastUpdate = (Date.now() - this.lastUpdateDateTime)/1000/60/60
         if( hoursSinceLastUpdate > 1){
-            console.log(hoursSinceLastUpdate)
             this.getWorkOrdersDataPromise();
+            this.lastUpdateDateTime = Date.now();
         } else{
-            this.getPackSizesFromTableData();
+            this.getPackSizesFromTableData(this.packSizeJSON);
         }
         
         
