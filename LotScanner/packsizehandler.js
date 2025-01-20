@@ -254,7 +254,7 @@ class PackSizeHandler{
             let {num_hb, num_nano} = 
             await _packSizeDataHandler.get_pack_sizes_for_lot(this.lot_number);
 
-            calculateProPouchesImport(liters_produced, num_hb, num_nano)
+            var num_pro = calculateProPouchesImport(liters_produced, num_hb, num_nano)
 
         } else {
 
