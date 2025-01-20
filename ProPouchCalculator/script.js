@@ -1,4 +1,4 @@
-
+import calculateProPouchesImport from "./propouchcalculator.js"
 /**
 TODO works ok, could be refactored
 how to make python web server connected to scale that does all this calculation
@@ -68,7 +68,9 @@ function calculateProPouches(event){
     var litersProduced = parseFloat(litersOrLotInput.value);
     var numberOfHomebrew = parseInt(numberHBInput.value);
     var numberOfNano = parseInt(numberNanoInput.value);
-    var numberOfPro = Math.floor((litersProduced - (numberOfHomebrew * .07)-(numberOfNano * .35))/1.73) + 1;
+    var numberOfPro = calculateProPouchesImport(
+        litersProduced, numberOfHomebrew, numberOfNano
+    );
     numberOfProOutput.value = numberOfPro;
     if(isNaN(numberOfPro)){
         numberOfProOutput.setAttribute("class", "red");        
@@ -180,7 +182,7 @@ class HarvestDataHandler{
     };
 
     calculateProPouches(){
-        this.numPro = Math.floor((this.litersProduced - (this.numHB * 0.07) - (this.numNano * 0.35))/1.73) + 1
+        this.numPro = calculateProPouchesImport(this.litersProduced, this.numHB, this.numNano)
         litersOrLotInput.value = this.litersProduced
         numberHBInput.value = this.numHB
         numberNanoInput.value = this.numNano
