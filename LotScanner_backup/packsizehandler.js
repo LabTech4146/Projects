@@ -1,4 +1,5 @@
 import fetch_json from "./jsonfetcher.js"
+import calculateProPouchesImport from "./propouchcalculator.js"
 
 /**
  * Module for fetching and handling data relating to pack sizes
@@ -253,13 +254,7 @@ class PackSizeHandler{
             let {num_hb, num_nano} = 
             await _packSizeDataHandler.get_pack_sizes_for_lot(this.lot_number);
 
-            var num_pro = Math.floor(
-                (liters_produced
-                    - (num_hb * 0.07)
-                    - (num_nano * 0.35)
-                )
-                /1.73
-                + 1);
+            var num_pro = calculateProPouchesImport(liters_produced, num_hb, num_nano)
 
         } else {
 
