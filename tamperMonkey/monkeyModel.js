@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         RFSmart Custom Field Dump Magic
 // @namespace    http://tampermonkey.net/
-// @version      2025-05-08
+// @version      2025-05-13
 // @description  Provide label printing enhancements.
 // @author       You
-// @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763
+// @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // @grant        none
 // @require https://code.jquery.com/jquery-3.6.0.min.js
