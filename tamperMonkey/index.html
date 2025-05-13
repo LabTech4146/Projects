@@ -1,0 +1,60 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="setForPro.js"></script>
+
+<style>
+
+    .loading {
+        opacity: 1;
+        animation: fade 2s infinite linear;
+        position: absolute;
+        background: blue;
+        padding: 100px 500px;
+        border-radius: 5px;
+    }
+
+    #monkey_form {
+        grid-template: 200px / 200px 300px 200px;
+        display: grid;
+        position: relative;
+    }
+
+    input[type=button] {
+        width: max-content;
+        padding: 5px;
+        margin: 5px;
+    }
+
+
+    @keyframes fade {
+    0%,100% { opacity: 0 }
+    50% { opacity: 1 }
+    }
+</style>
+
+
+<form id="monkey_form">
+    <div id="label_selection" >
+        <label><input type="radio" name="label_size" value="Pro" checked> Pro</label><br>
+        <label><input type="radio" name="label_size" value="Nano"> Nano</label><br>
+        <label><input type="radio" name="label_size" value="Homebrew"> Homebrew</label> 
+        <input name="go_button" type="button" value="Go!" onclick="monkeyModel.printTomorrowVesselLabels()">
+        
+    </div>
+    <div >
+        <label >Lot: <input name="lot_input" type="text"></label>
+        <br>
+        <label for="quantity_input">Quantity: <input type="number" name="quantity_input"></label>
+        <br>
+        <label for="is_autocut">Auto-Cut? <input checked type="checkbox" name="is_autocut"></label>
+        <br>
+    </div>
+    <div>
+        <input name="20l_button" type="button" value="Tomorrow 20 Liter" onclick="monkeyModel.printTomorrow20Liter()">
+        <input name="400l_button" type="button" value="Tomorrow 400 Liter" onclick="monkeyModel.printTomorrow400Liter()">
+    </div>
+    <div class="loading" id="status">
+        Working...
+    </div>
+</form>
+
+
