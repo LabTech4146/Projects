@@ -1,3 +1,16 @@
+// ==UserScript==
+// @name         RFSmart Custom Field Dump Magic
+// @namespace    http://tampermonkey.net/
+// @version      2025-05-08
+// @description  Provide label printing enhancements.
+// @author       You
+// @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
+// @grant        none
+// @require https://code.jquery.com/jquery-3.6.0.min.js
+// ==/UserScript==
+
+
 /**
  * Manager of HTML elements injected into page.
  * Can be used to read form values and insert the form. 
