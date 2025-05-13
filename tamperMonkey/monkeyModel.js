@@ -52,6 +52,7 @@ class HTMLManager {
 <form id="monkey_form">
     <div id="label_selection" >
         <input name="go_button" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
+        <span id="attention">⬆️New! Click this to print 20L and 400L vessel stickers for the next work day</span>
         
     </div>
     <div >
@@ -90,12 +91,17 @@ class HTMLManager {
     setFormDisable(value) {
         $(':input').prop('disabled', value)
         if (value){
-            this.setAllButtonText('Working...')
+            this.setAllButtonText('Working...');
+            this.setAttentionText(`Thank you for trying the feature.
+                If labels print incorrectly please tell Wyatt.`)
         };
     };
     setAllButtonText(value) {
         $(':button').prop('value', value);
     };
+    setAttentionText(value) {
+        $('#attention').text(value)
+    }
 };
 
 class Utilities {
