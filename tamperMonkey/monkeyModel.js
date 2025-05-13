@@ -266,6 +266,9 @@ class DataManager {
 }
 
 class MonkeyModel {
+
+    DEFAULT_PRINTER = /AVL HARVEST 3x2/
+    
     constructor() {
         this.htmlManger = new HTMLManager();
         this.printManager = new PrintManager();
@@ -299,8 +302,8 @@ class MonkeyModel {
 
     async printTomorrowVesselLabels(){
         this.htmlManger.setFormDisable(true);
-        await this.printTomorrow20Liter(/AVL HARVEST \(3x2\)/);
-        await this.printTomorrow400Liter(/AVL HARVEST \(3x2\)/);
+        await this.printTomorrow20Liter(this.DEFAULT_PRINTER);
+        await this.printTomorrow400Liter(this.DEFAULT_PRINTER);
         this.htmlManger.setAllButtonText('Labels Printed. Refresh Page to Enable Printing Again.')
     };
 };
