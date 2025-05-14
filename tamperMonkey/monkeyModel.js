@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RFSmart Custom Field Dump Magic
 // @namespace    http://tampermonkey.net/
-// @version      2025-05-13
+// @version      2025-05-14b
 // @description  Provide label printing enhancements.
 // @author       You
 // @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763*
@@ -68,7 +68,7 @@ class HTMLManager {
      * Insert the monkey form after a provided element.
      * @param {String} jQuerySelector element to insert after.
      */
-    insertInterfaceAfter(jQuerySelector) {
+    _insertInterfaceAfter(jQuerySelector) {
         let e = $(jQuerySelector)[0];
         let insert = document.createElement('div');
         insert.innerHTML = this.formHTML;
@@ -101,7 +101,43 @@ class HTMLManager {
     };
     setAttentionText(value) {
         $('#attention').text(value)
+    };
+    insertInterface() {
+        this._insertInterfaceAfter("#viewFilterView");
+    };
+    /**
+     * Builds in html elements based on condition of RFSmart page.
+     * Becuase RFSmart clears html elements on many input changes
+     * we need to check after changes and add back in interface if it has
+     * been destroyed.
+     */
+    runHtmlBuildLogic() {
+        if (viewModel.CurrentView() === 'viewFilterView') {
+            if (!$('#monkey_form').length) {
+                this.insertInterface();
+            };
+        };
+    };
+    handleHtmlChange() {
+        this.runHtmlBuildLogic();
+        console.log('change')
     }
+    intializeObserver() {
+        let target = document.querySelector('#application');
+        this.observer = new MutationObserver((mutations) => {
+            monkeyModel.htmlManger.handleHtmlChange();
+        });
+        this.observer.observe(target, {
+            attributes: true,
+            childList: true,
+            characterData: true,
+            subtree: true
+        });
+    }
+    initialize() {
+        this.runHtmlBuildLogic();
+        this.intializeObserver();
+    };
 };
 
 class Utilities {
@@ -293,12 +329,14 @@ class MonkeyModel {
         this.printManager = new PrintManager();
         this.dataManger = new DataManager();
     };
+      
 
     async intializeAsync() {
         await this.dataManger.intializeDatasets();
-        this.htmlManger.insertInterfaceAfter("#viewFilterView");
+        this.htmlManger.initialize();
     }
-    
+
+        
     async printTomorrow20Liter(printerName) {
         let recordIDs = await this.dataManger.get20LiterRecordIDs();
         let printerID = this.dataManger.getPrinterID(printerName);
