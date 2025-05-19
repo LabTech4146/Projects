@@ -336,26 +336,35 @@ class MonkeyModel {
         this.htmlManger.initialize();
     }
 
+    async printRecordSet(internalIds, printerName, labelName, numCopies){
+        await this.printManager.printRecords(
+            internalIds,
+            this.dataManger.getPrinterID(printerName),
+            this.dataManger.getLabelID(labelName),
+            numCopies
+        );
+    };
         
     async printTomorrow20Liter(printerName) {
         let recordIDs = await this.dataManger.get20LiterRecordIDs();
-        let printerID = this.dataManger.getPrinterID(printerName);
-        let labelID = this.dataManger.getLabelID("00 - Seed and Final Vessel Label");
-        let  numLabels = 1;
-        await this.printManager.printRecords(
-            recordIDs, printerID, labelID, numLabels
+        await this.printRecordSet(recordIDs, printerName, 
+            "00 - Seed and Final Vessel Label", 1
         );
+        if (recordIDs.length) {
+            await this.printRecordSet([recordIDs[0]], printerName,
+                "00 - Control Label (3x2)", 1
+            );
+        };
     };
 
     async printTomorrow400Liter(printerName) {
         let recordIDs = await this.dataManger.get400LiterRecordIDs();
-        let printerID = this.dataManger.getPrinterID(printerName);
-        let labelID = this.dataManger.getLabelID("00 - Seed and Final Vessel Label");
-        let  numLabels = 1;
-        await this.printManager.printRecords(
-            recordIDs, printerID, labelID, numLabels
+        await this.printRecordSet(recordIDs, printerName,
+            "00 - Seed and Final Vessel Label", 1
         );
     };
+
+    
 
     async printTomorrowVesselLabels(){
         this.htmlManger.setFormDisable(true);
