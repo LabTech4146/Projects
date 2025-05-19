@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RFSmart Custom Field Dump Magic
 // @namespace    http://tampermonkey.net/
-// @version      2025-05-19
+// @version      2025-05-19b
 // @description  Provide label printing enhancements.
 // @author       You
 // @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763*
@@ -352,7 +352,7 @@ class MonkeyModel {
         );
         if (recordIDs.length) {
             await this.printRecordSet([recordIDs[0]], printerName,
-                "00 - Control Label (3x2)", 1
+                "00 - Control Label", 1
             );
         };
     };
@@ -379,9 +379,11 @@ const monkeyModel = new MonkeyModel();
 await monkeyModel.intializeAsync();
 
 async function goTest() {
-    await monkeyModel.printTomorrowVesselLabels();
+    await monkeyModel.printRecordSet([353756], /AVL QC LAB 3x2/, "00 - Control Label", 1)
+
 };
 
+window.goTest = goTest
 
 window.monkeyModel = monkeyModel;
 
