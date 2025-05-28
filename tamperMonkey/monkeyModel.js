@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RFSmart Custom Field Dump Magic
 // @namespace    http://tampermonkey.net/
-// @version      2025-05-19b
+// @version      2025-05-28
 // @description  Provide label printing enhancements.
 // @author       You
 // @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763*
@@ -18,7 +18,9 @@
 class HTMLManager {
     constructor () {
         this.formHTML = `
-            <style>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<style>
 
     .loading {
         opacity: 1;
@@ -30,7 +32,7 @@ class HTMLManager {
     }
 
     #monkey_form {
-        grid-template: 200px / 200px 300px 200px;
+        grid-template: 200px / 250px 250px 200px;
         display: grid;
         position: relative;
     }
@@ -52,14 +54,19 @@ class HTMLManager {
 <form id="monkey_form">
     <div id="label_selection" >
         <input name="go_button" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
-        <span id="attention">⬆️New! Click this to print 20L and 400L vessel stickers for the next work day</span>
-        
+    </div>
+    <div id="label_selection" >
+        <input name="go_button" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
+        <span id="attention">⬆️New! Click this to print labels with barcodes showing today's harvest expiration dates.</span>
     </div>
     <div >
     </div>
     <div>
     </div>
 </form>
+
+
+
 
             `
     };
@@ -315,6 +322,11 @@ class DataManager {
             "!WMz Next Work Day Final Vessel Starts EXPORT"
         );
     };
+    async getHarvestRecordIDs() {
+        return await this._getInternalIDsFromSavedSearch(
+            "!WMz Today Harvest EXPORT"
+        );
+    };
 
 
    
@@ -357,21 +369,26 @@ class MonkeyModel {
         };
     };
 
+    async printHarvestExpDateBarcodeLabels(){
+        let recordIDs = await this.dataManger.getHarvestRecordIDs();
+        await this.printRecordSet([recordIDs[0]], this.DEFAULT_PRINTER,
+            "00 - Expiration Date Barcode Labels", 1
+        );
+    };
+
     async printTomorrow400Liter(printerName) {
         let recordIDs = await this.dataManger.get400LiterRecordIDs();
         await this.printRecordSet(recordIDs, printerName,
             "00 - Seed and Final Vessel Label", 1
         );
     };
-
-    
-
     async printTomorrowVesselLabels(){
         this.htmlManger.setFormDisable(true);
         await this.printTomorrow20Liter(this.DEFAULT_PRINTER);
         await this.printTomorrow400Liter(this.DEFAULT_PRINTER);
         this.htmlManger.setAllButtonText('Labels Printed. Refresh Page to Enable Printing Again.')
     };
+    
 };
 
 const utilities = new Utilities();
@@ -379,8 +396,7 @@ const monkeyModel = new MonkeyModel();
 await monkeyModel.intializeAsync();
 
 async function goTest() {
-    await monkeyModel.printRecordSet([353756], /AVL QC LAB 3x2/, "00 - Control Label", 1)
-
+    await monkeyModel.printHarvestExpDateBarcodeLabels();
 };
 
 window.goTest = goTest

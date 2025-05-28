@@ -1,5 +1,4 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="setForPro.js"></script>
 
 <style>
 
@@ -13,7 +12,7 @@
     }
 
     #monkey_form {
-        grid-template: 200px / 200px 300px 200px;
+        grid-template: 200px / 250px 250px 200px;
         display: grid;
         position: relative;
     }
@@ -32,35 +31,13 @@
 </style>
 
 
-<form id="monkey_form2">
-    <div id="label_selection" >
-        <label><input type="radio" name="label_size" value="Pro" checked> Pro</label><br>
-        <label><input type="radio" name="label_size" value="Nano"> Nano</label><br>
-        <label><input type="radio" name="label_size" value="Homebrew"> Homebrew</label> 
-        <input name="go_button" type="button" value="Go!" onclick="monkeyModel.printTomorrowVesselLabels()">
-        
-    </div>
-    <div >
-        <label >Lot: <input name="lot_input" type="text"></label>
-        <br>
-        <label for="quantity_input">Quantity: <input type="number" name="quantity_input"></label>
-        <br>
-        <label for="is_autocut">Auto-Cut? <input checked type="checkbox" name="is_autocut"></label>
-        <br>
-    </div>
-    <div>
-        <input name="20l_button" type="button" value="Tomorrow 20 Liter" onclick="monkeyModel.printTomorrow20Liter()">
-        <input name="400l_button" type="button" value="Tomorrow 400 Liter" onclick="monkeyModel.printTomorrow400Liter()">
-    </div>
-    <div class="loading" id="status">
-        Working...
-    </div>
-</form>
 <form id="monkey_form">
     <div id="label_selection" >
         <input name="go_button" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
-        <span id="attention">⬆️New! Click this to print 20L and 400L vessel stickers for the next work day</span>
-        
+    </div>
+    <div id="label_selection" >
+        <input name="go_button" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
+        <span id="attention">⬆️New! Click this to print labels with barcodes showing today's harvest expiration dates.</span>
     </div>
     <div >
     </div>
