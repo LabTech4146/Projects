@@ -374,6 +374,7 @@ class MonkeyModel {
         await this.printRecordSet([recordIDs[0]], this.DEFAULT_PRINTER,
             "00 - Expiration Date Barcode Labels", 1
         );
+        this.htmlManger.setAllButtonText('Labels Printed. Refresh Page to Enable Printing Again.')
     };
 
     async printTomorrow400Liter(printerName) {
