@@ -374,11 +374,12 @@ class MonkeyModel {
     };
 
     async printHarvestExpDateBarcodeLabels(){
+        this.htmlManger.setHarvestBarcodeBtnAsPrinted();
         let recordIDs = await this.dataManger.getHarvestRecordIDs();
         await this.printRecordSet([recordIDs[0]], this.DEFAULT_PRINTER,
             "00 - Expiration Date Barcode Labels", 1
         );
-        this.htmlManger.setHarvestBarcodeBtnAsPrinted();
+        
 
         
     };
