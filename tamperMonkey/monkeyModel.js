@@ -53,11 +53,11 @@ class HTMLManager {
 
 <form id="monkey_form">
     <div id="label_selection" >
-        <input name="go_button" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
+        <input name="tomorrow_vessel_btn" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
     </div>
     <div id="label_selection" >
-        <input name="go_button" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
-        <span id="attention">⬆️New! Click this to print labels with barcodes showing today's harvest expiration dates.</span>
+        <input name="harvest_barcode_btn" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
+        <span id="attention">⬆️New! Use these labels to speed data entry when doing work order completions.</span>
     </div>
     <div >
     </div>
@@ -81,7 +81,6 @@ class HTMLManager {
         insert.innerHTML = this.formHTML;
         e.append(insert);
     };
-
     /**
      * Get the data from the monkey form. Elements may be iterated over
      * via for (var e of FormData).
@@ -105,6 +104,10 @@ class HTMLManager {
     };
     setAllButtonText(value) {
         $(':button').prop('value', value);
+    };
+    setHarvestBarcodeBtnAsPrinted() {
+        $("[name='harvest_barcode_btn']").prop(
+            {'disabled': true, 'value': 'Harvest barcode labels printed.'});
     };
     setAttentionText(value) {
         $('#attention').text(value)
@@ -145,6 +148,7 @@ class HTMLManager {
         this.runHtmlBuildLogic();
         this.intializeObserver();
     };
+    
 };
 
 class Utilities {
@@ -374,7 +378,9 @@ class MonkeyModel {
         await this.printRecordSet([recordIDs[0]], this.DEFAULT_PRINTER,
             "00 - Expiration Date Barcode Labels", 1
         );
-        this.htmlManger.setAllButtonText('Labels Printed. Refresh Page to Enable Printing Again.')
+        this.htmlManger.setHarvestBarcodeBtnAsPrinted();
+
+        
     };
 
     async printTomorrow400Liter(printerName) {
@@ -397,7 +403,7 @@ const monkeyModel = new MonkeyModel();
 await monkeyModel.intializeAsync();
 
 async function goTest() {
-    await monkeyModel.printHarvestExpDateBarcodeLabels();
+    await monkeyModel.htmlManger.setHarvestBarcodeBtnAsPrinted();
 };
 
 window.goTest = goTest
