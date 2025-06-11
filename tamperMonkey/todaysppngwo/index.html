@@ -1,0 +1,48 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<style>
+
+    .loading {
+        opacity: 1;
+        animation: fade 2s infinite linear;
+        position: absolute;
+        background: blue;
+        padding: 100px 500px;
+        border-radius: 5px;
+    }
+
+    #monkey_form {
+        grid-template: 200px / 250px 250px 200px;
+        display: grid;
+        position: relative;
+    }
+
+    input[type=button] {
+        width: max-content;
+        padding: 5px;
+        margin: 5px;
+    }
+
+
+    @keyframes fade {
+    0%,100% { opacity: 0 }
+    50% { opacity: 1 }
+    }
+</style>
+
+
+<form id="monkey_form">
+    <div id="label_selection" >
+        <input name="go_button" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
+    </div>
+    <div id="label_selection" >
+        <input name="go_button" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
+        <span id="attention">⬆️New! Click this to print labels with barcodes showing today's harvest expiration dates.</span>
+    </div>
+    <div >
+    </div>
+    <div>
+    </div>
+</form>
+
+
