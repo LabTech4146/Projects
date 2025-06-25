@@ -23,6 +23,11 @@
         margin: 5px;
     }
 
+    .deprecated {
+        color: gainsboro;
+        
+    }
+
 
     @keyframes fade {
     0%,100% { opacity: 0 }
@@ -32,17 +37,20 @@
 
 
 <form id="monkey_form">
+    
     <div id="label_selection" >
-        <input name="go_button" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
+        <input name="today_vessel_btn" type="button" value="Print Today's Vessel Labels" onclick="monkeyModel.printTodayVesselLabels()">
+        <span id="attention">⬆️New! We are trying out printing these on day of use during morning computer person instead of day before.</span>
     </div>
     <div id="label_selection" >
-        <input name="go_button" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
-        <span id="attention">⬆️New! Click this to print labels with barcodes showing today's harvest expiration dates.</span>
+        <input name="harvest_barcode_btn" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
+    </div>
+    <div id="label_selection" >
+        <input class="deprecated" name="tomorrow_vessel_btn" type="button" value="Print Next Work Day Vessel Labels ()" onclick="monkeyModel.printTomorrowVesselLabels()">
     </div>
     <div >
     </div>
     <div>
     </div>
 </form>
-
 

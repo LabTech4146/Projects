@@ -32,7 +32,7 @@ class HTMLManager {
     }
 
     #monkey_form {
-        grid-template: 200px / 250px 250px 200px;
+        grid-template: 200px 200px / 300px 300px ;
         display: grid;
         position: relative;
     }
@@ -52,16 +52,18 @@ class HTMLManager {
 
 
 <form id="monkey_form">
+    
     <div id="label_selection" >
-        <input name="tomorrow_vessel_btn" type="button" value="Print Next Work Day Vessel Labels" onclick="monkeyModel.printTomorrowVesselLabels()">
+        <input name="today_vessel_btn" type="button" value="Print Today's Vessel Labels (Trialing)" onclick="monkeyModel.printTodayVesselLabels()">
+        <span id="attention">⬆️New! We are trying out printing these on day of use during morning computer person routine instead of day before.</span>
     </div>
     <div id="label_selection" >
         <input name="harvest_barcode_btn" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
-        <span id="attention">⬆️New! Use these labels to speed data entry when doing work order completions.</span>
+    </div>
+    <div id="label_selection" >
+        <input name="tomorrow_vessel_btn" type="button" value="Print Next Work Day Vessel Labels (Deprecated)" onclick="monkeyModel.printTomorrowVesselLabels()">
     </div>
     <div >
-    </div>
-    <div>
     </div>
 </form>
 
@@ -316,15 +318,21 @@ class DataManager {
         
         return searchResult.data.map(row => row[internalIDIndex]);
     };
-    async get20LiterRecordIDs() {
+    async getNextWorkDay20LiterRecordIDs() {
         return await this._getInternalIDsFromSavedSearch(
             "!WMz Next Work Day Seed Vessel Starts EXPORT"
         );
     };
-    async get400LiterRecordIDs() {
+    async getNextWorkDay400LiterRecordIDs() {
         return await this._getInternalIDsFromSavedSearch(
             "!WMz Next Work Day Final Vessel Starts EXPORT"
         );
+    };
+    async getToday20LiterRecordIDs() {
+        return await this._getInternalIDsFromSavedSearch("!WMz Today Seed EXPORT");
+    };
+    async getToday400LiterRecordIDs() {
+        return await this._getInternalIDsFromSavedSearch("!WMz Today Final Vessel EXPORT");
     };
     async getHarvestRecordIDs() {
         return await this._getInternalIDsFromSavedSearch(
@@ -338,31 +346,35 @@ class DataManager {
 
 class MonkeyModel {
 
-    DEFAULT_PRINTER = /AVL HARVEST 3x2/
+    DEFAULT_PRINTER = /123 DO NOT DELETE/
     
     constructor() {
         this.htmlManger = new HTMLManager();
         this.printManager = new PrintManager();
-        this.dataManger = new DataManager();
+        this.dataManager = new DataManager();
     };
       
 
     async intializeAsync() {
-        await this.dataManger.intializeDatasets();
+        await this.dataManager.intializeDatasets();
         this.htmlManger.initialize();
     }
 
     async printRecordSet(internalIds, printerName, labelName, numCopies){
         await this.printManager.printRecords(
             internalIds,
-            this.dataManger.getPrinterID(printerName),
-            this.dataManger.getLabelID(labelName),
+            this.dataManager.getPrinterID(printerName),
+            this.dataManager.getLabelID(labelName),
             numCopies
         );
     };
         
-    async printTomorrow20Liter(printerName) {
-        let recordIDs = await this.dataManger.get20LiterRecordIDs();
+    async print20LiterSet(printerName, is_for_today) {
+        if (is_for_today) {
+            var recordIDs = await this.dataManager.getToday20LiterRecordIDs();
+        } else {
+            var recordIDs = await this.dataManager.getNextWorkDay20LiterRecordIDs();
+        }
         await this.printRecordSet(recordIDs, printerName, 
             "00 - Seed and Final Vessel Label", 1
         );
@@ -375,22 +387,42 @@ class MonkeyModel {
 
     async printHarvestExpDateBarcodeLabels(){
         this.htmlManger.setHarvestBarcodeBtnAsPrinted();
-        let recordIDs = await this.dataManger.getHarvestRecordIDs();
+        let recordIDs = await this.dataManager.getHarvestRecordIDs();
         await this.printRecordSet([recordIDs[0]], this.DEFAULT_PRINTER,
             "00 - Expiration Date Barcode Labels", 1
         );
     };
 
-    async printTomorrow400Liter(printerName) {
-        let recordIDs = await this.dataManger.get400LiterRecordIDs();
+    async print400LiterSet(printerName, is_for_today) {
+        if (is_for_today) {
+            var recordIDs = await this.dataManager.getToday400LiterRecordIDs();    
+        } else {
+            var recordIDs = await this.dataManager.getNextWorkDay400LiterRecordIDs();;
+        };
+        
         await this.printRecordSet(recordIDs, printerName,
             "00 - Seed and Final Vessel Label", 1
         );
     };
     async printTomorrowVesselLabels(){
+        let confirmText = `
+        We are moving to printing vessel labels on
+        the day of use, instead of day before.
+        are you sure you want to print next day labels?
+
+        Press 'OK' to confirm. Otherwise press 'Cancel'."`
+        if(window.confirm(confirmText)){
+            this.htmlManger.setFormDisable(true);
+            await this.print20LiterSet(this.DEFAULT_PRINTER, false);
+            await this.print400LiterSet(this.DEFAULT_PRINTER, false);
+            this.htmlManger.setAllButtonText('Labels Printed. Refresh Page to Enable Printing Again.')
+        };
+        
+    };
+    async printTodayVesselLabels(){
         this.htmlManger.setFormDisable(true);
-        await this.printTomorrow20Liter(this.DEFAULT_PRINTER);
-        await this.printTomorrow400Liter(this.DEFAULT_PRINTER);
+        await this.print20LiterSet(this.DEFAULT_PRINTER, true);
+        await this.print400LiterSet(this.DEFAULT_PRINTER, true);
         this.htmlManger.setAllButtonText('Labels Printed. Refresh Page to Enable Printing Again.')
     };
     
@@ -401,7 +433,12 @@ const monkeyModel = new MonkeyModel();
 await monkeyModel.intializeAsync();
 
 async function goTest() {
-    await monkeyModel.htmlManger.setHarvestBarcodeBtnAsPrinted();
+    let confirmText = `
+        We are moving to printing vessel labels on
+        the day of use, instead of day before.
+        are you sure you want to print next day labels?
+        Press 'OK' to confirm. Otherwise press 'Cancel'."`
+    window.confirm(confirmText);
 };
 
 window.goTest = goTest
