@@ -346,7 +346,7 @@ class DataManager {
 
 class MonkeyModel {
 
-    DEFAULT_PRINTER = /123 DO NOT DELETE/
+    DEFAULT_PRINTER = /AVL HARVEST 3x2/
     
     constructor() {
         this.htmlManger = new HTMLManager();
