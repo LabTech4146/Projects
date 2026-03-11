@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RFSmart Custom Field Dump Magic
 // @namespace    http://tampermonkey.net/
-// @version      2025-06-25b
+// @version      2026-03-11
 // @description  Provide label printing enhancements.
 // @author       You
 // @match        https://4099054.app.netsuite.com/app/site/hosting/scriptlet.nl?script=customscript_rfs_controller&deploy=customdeploy_rfs_controller&file=1459763*
@@ -32,7 +32,7 @@ class HTMLManager {
     }
 
     #monkey_form {
-        grid-template: 200px 200px / 300px 300px ;
+        grid-template: 200px / 250px 250px;
         display: grid;
         position: relative;
     }
@@ -41,6 +41,11 @@ class HTMLManager {
         width: max-content;
         padding: 5px;
         margin: 5px;
+    }
+
+    .deprecated {
+        color: gainsboro;
+        
     }
 
 
@@ -54,18 +59,20 @@ class HTMLManager {
 <form id="monkey_form">
     
     <div id="label_selection" >
-        <input name="today_vessel_btn" type="button" value="Print Today's Vessel Labels (Trialing)" onclick="monkeyModel.printTodayVesselLabels()">
-        <span id="attention">⬆️New! We are trying out printing these on day of use during morning computer person routine instead of day before.</span>
+        <input name="today_vessel_btn" type="button" value="Print Today's Vessel Labels" onclick="monkeyModel.printTodayVesselLabels()">
+        <img src="https://labtech4146.github.io/Projects/media/yeastman.gif" width="100px">
     </div>
     <div id="label_selection" >
         <input name="harvest_barcode_btn" type="button" value="Print Today Exp Date Barcode Labels" onclick="monkeyModel.printHarvestExpDateBarcodeLabels()">
     </div>
-    <div id="label_selection" >
-        <input name="tomorrow_vessel_btn" type="button" value="Print Next Work Day Vessel Labels (Deprecated)" onclick="monkeyModel.printTomorrowVesselLabels()">
-    </div>
+    
     <div >
+        
+    </div>
+    <div>
     </div>
 </form>
+
 
 
 
