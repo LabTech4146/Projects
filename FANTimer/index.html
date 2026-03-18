@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=2.0"> 
+    <title>FAN Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+</head>
+<body>
+    <h1>FAN TIMER</h1>
+    <form id="ui_form">
+        <div id="options_container">
+            <div id="hw_options" class="options">
+                <p>HW</p>
+                    <div class="option_set">
+                        <p class="option_set_title">Bath Temp (C°):</p>
+                        <input id="hw_100" name="hw_temp" type="radio" value="100" checked>    
+                        <label for="hw_100">100</label>
+                        <input id="hw_90" name="hw_temp" type="radio" value="90">    
+                        <label for="hw_90">90</label>
+                    </div>
+                    <div class="option_set">
+                        <label for="hw_duration">Duration (m):</label>
+                        <input type="number" name="hw_dur" id="hw_duration" value="16">
+                    </div>  
+            </div>
+            <div id="cw_options" class="options">
+                <p>CW</p>
+                    <div class="option_set">
+                        <p class="option_set_title">Bath Temp (C°):</p>
+                        <input id="cw_100" name="cw_temp" type="radio" value="20" checked>    
+                        <label for="cw_100">20</label>
+                        <input id="cw_90" name="cw_temp" type="radio" value="0">    
+                        <label for="cw_90">0</label>
+                    </div>
+                    <div class="option_set">
+                        <label for="cw_duration">Duration (m):</label>
+                        <input type="number" name="cw_dur" id="cw_duration" value="20">
+                    </div>
+            </div>
+        </div>
+        <div id="lower_grid">
+            <div id="button_container">
+                <input type="button" name="start_hw_bath" id="start_hw_bath" value="Start HW Bath">
+                <input type="button" name="start_cw_bath" id="start_cw_bath" value="Start CW Bath" disabled>
+                <input type="button" name="stop_cw_bath" id="stop_cw_bath" value="Stop CW Bath" disabled>
+                <input type="button" name="export_data" id="export_data" value="Export Data" disabled>
+            </div>
+            <div id="timer_container">
+                <div id="timer_value">5.00</div>
+            </div>
+        </div>
+        
+    </form>
+    <div id="export_content"></div>
+    <script src="script.js" type="module"></script>
+</body>
+</html>
