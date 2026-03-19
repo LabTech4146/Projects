@@ -29,6 +29,17 @@ document.addEventListener("DOMContentLoaded", () => {
     export_data_button.onclick = export_data_button_on_click
 });
 
+window.addEventListener("beforeunload", (event) => {  
+  // Cancel the event (optional, but some browsers require it)  
+  event.preventDefault();  
+  // Custom message (modern browsers may ignore this and show a default message)  
+  event.returnValue = "Are you sure you want to leave? Unsaved changes may be lost.";  
+  return event.returnValue; // For older browsers  
+});  
+    
+    
+
+
 function hw_bath_start_button_on_click() {
     hw_intended_duration_m = hw_duration.value
     hw_timer.start(hw_intended_duration_m * 1000 * 60);
@@ -41,7 +52,7 @@ function hw_bath_start_button_on_click() {
 function cw_bath_start_button_on_click() {
     cw_intended_duration_m = cw_duration.value
     cw_timer.start(cw_intended_duration_m * 1000 * 60);
-    setTimeout(() => {alarm_audio.play()}, hw_intended_duration_m * 1000 * 60 - (alarm_t_minus_s * 1000))
+    setTimeout(() => {alarm_audio.play()}, cw_intended_duration_m * 1000 * 60 - (alarm_t_minus_s * 1000))
     hw_timer.stop();
     window_model.stop_hw_duration_updater();
     window_model.bind_to_timer(cw_duration, cw_timer, countdown_elem, "cw", timeout_audio);
@@ -59,11 +70,14 @@ function cw_bath_stop_button_on_click() {
 function export_data_button_on_click() {
     let f_data = new FormData(form_elem);
     let export_data = {
-        hw_bath_temp : f_data.get('hw_temp'),
-        cw_bath_temp : f_data.get('cw_temp'),
-        hw_duration_s : hw_timer.get_elapsed_ms() / 1000,
-        cw_duration_s : cw_timer.get_elapsed_ms() / 1000,
-        date : new Date().toLocaleDateString("en-US"),
+        hw_bath_temp: f_data.get('hw_temp'),
+        cw_bath_temp: f_data.get('cw_temp'),
+        hw_duration_s: hw_timer.get_elapsed_ms() / 1000,
+        cw_duration_s: cw_timer.get_elapsed_ms() / 1000,
+        date: new Date().toLocaleDateString("en-US"),
+        standard_lot: "260316WM",
+        dilution_lot: "260316WM",
+        ninhydrin_lot: "260330WM",
     };
     export_content_div.innerHTML = JSON.stringify(export_data);
     
