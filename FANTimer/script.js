@@ -57,10 +57,15 @@ function cw_bath_stop_button_on_click() {
 }
 
 function export_data_button_on_click() {
-    let f_data = new FormData(form_elem)
-    window.f_data = f_data
-    f_data.append("date", new Date().toLocaleDateString("en-US"));
-    export_content_div.innerHTML = [...f_data.entries()]
+    let f_data = new FormData(form_elem);
+    let export_data = {
+        hw_bath_temp : f_data.get('hw_temp'),
+        cw_bath_temp : f_data.get('cw_temp'),
+        hw_duration_s : hw_timer.get_elapsed_ms() / 1000,
+        cw_duration_s : cw_timer.get_elapsed_ms() / 1000,
+        date : new Date().toLocaleDateString("en-US"),
+    };
+    export_content_div.innerHTML = JSON.stringify(export_data);
     
 }
 
