@@ -16,7 +16,7 @@ class windowModel {
             var elapsed_minutes = t.get_elapsed_ms() / 1000 / 60;
             var seconds_remaining = t.get_time_left_ms() / 1000;
             d.value = elapsed_minutes.toFixed(1);
-            c.innerHTML = `Time left<br> ${seconds_remaining.toFixed(0)}`;
+            c.innerHTML = `Time left<br> ${seconds_remaining.toFixed(0)}<br> (${t.get_eta_clock()})`;
             if (seconds_remaining < 0 && !windowModel.over_time) {timeout_audio.play();};
         }, 1000, timer, text_input, countdown_elem, this);
 

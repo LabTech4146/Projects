@@ -7,7 +7,8 @@ class Timer{
     start(duration_ms) {
         this.start_time = Date.now();
         if (typeof duration_ms !== 'undefined'){
-            this.duration_ms = parseInt(duration_ms)
+            this.duration_ms = parseInt(duration_ms);
+            this.eta = this.start_time + duration_ms;
         }
     };
     get_elapsed_ms() {
@@ -22,6 +23,10 @@ class Timer{
     }
     get_time_left_ms() {
         return this.duration_ms - this.get_elapsed_ms();
+    }
+    get_eta_clock() {
+        let eta_time = new Date(this.eta);
+        return `${eta_time.getHours()}:${eta_time.getMinutes()}`
     }
 };
 
