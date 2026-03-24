@@ -8,7 +8,7 @@ var hw_bath_start_button, cw_bath_start_button, cw_bath_stop_button, export_data
 var hw_timer = new Timer();
 window.h = hw_timer;
 var cw_timer = new Timer();
-var hw_intended_duration_m, cw_intended_duration_m, countdown_elem;
+var hw_intended_duration_m, cw_intended_duration_m, countdown_elem, clock_value_elem;
 var alarm_audio = new Audio('./alarm.mp3');
 var alarm_t_minus_s = 30;
 var timeout_audio = new Audio('./timeout.mp3');
@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     export_data_button = document.getElementById("export_data")
     hw_duration = document.getElementById("hw_duration");
     cw_duration = document.getElementById("cw_duration");
-    countdown_elem = document.getElementById("timer_value")
+    countdown_elem = document.getElementById("timer_value");
+    clock_value_elem = document.getElementById("clock_value");
     form_elem = document.getElementById("ui_form");
     export_content_div = document.getElementById("export_content");
     hw_bath_start_button.onclick = hw_bath_start_button_on_click
@@ -41,8 +42,9 @@ window.addEventListener("beforeunload", (event) => {
 
 
 function hw_bath_start_button_on_click() {
-    hw_intended_duration_m = hw_duration.value
+    hw_intended_duration_m = hw_duration.value;
     hw_timer.start(hw_intended_duration_m * 1000 * 60);
+    clock_value_elem.innerHTML = `(${hw_timer.get_eta_clock()})`;
     setTimeout(() => {alarm_audio.play()}, hw_intended_duration_m * 1000 * 60 - (alarm_t_minus_s * 1000))
     window_model.bind_to_timer(hw_duration, hw_timer, countdown_elem, "hw", timeout_audio);
     hw_bath_start_button.disabled = true;
@@ -52,6 +54,7 @@ function hw_bath_start_button_on_click() {
 function cw_bath_start_button_on_click() {
     cw_intended_duration_m = cw_duration.value
     cw_timer.start(cw_intended_duration_m * 1000 * 60);
+    clock_value_elem.innerHTML = `(${cw_timer.get_eta_clock()})`;
     setTimeout(() => {alarm_audio.play()}, cw_intended_duration_m * 1000 * 60 - (alarm_t_minus_s * 1000))
     hw_timer.stop();
     window_model.stop_hw_duration_updater();

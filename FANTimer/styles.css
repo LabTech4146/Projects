@@ -35,7 +35,7 @@ input[type=number]{
   grid-template: 200px / 200px 200px;
 }
 
-#timer_value{
+#timer_value, #clock_value{
   text-align: center;
   line-height: 50px;
   font-size: 33px;
