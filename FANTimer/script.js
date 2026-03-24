@@ -82,6 +82,8 @@ function export_data_button_on_click() {
         standard_lot: "260316WM",
         dilution_lot: "260316WM",
         ninhydrin_lot: "260330WM",
+        centrifuge_time_s: f_data.get("centrifuge_time_s"),
+        centrifuge_rcf: f_data.get("centrifuge_rcf"),
     };
     export_content_div.innerHTML = JSON.stringify(export_data);
     
