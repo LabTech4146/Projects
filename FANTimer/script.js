@@ -79,7 +79,7 @@ function export_data_button_on_click() {
         hw_duration_s: hw_timer.get_elapsed_ms() / 1000,
         cw_duration_s: cw_timer.get_elapsed_ms() / 1000,
         date: new Date().toLocaleDateString("en-US"),
-        standard_lot: "260316WM",
+        standard_lot: "260319-1WM",
         dilution_lot: "260316WM",
         ninhydrin_lot: "260330WM",
         centrifuge_time_s: f_data.get("centrifuge_time_s"),
