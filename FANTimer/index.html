@@ -43,17 +43,26 @@
                 <label for="ambient_temp">Ambient Temp (C°):</label>
                 <input type="number" name="ambient_temp" id="ambient_t" value="22"><br>
                 <label for="centrifuge_time_s">Centrifuge Time(s):</label>
-                <input type="number" name="centrifuge_time_s" id="centrifuge_time" value="11"><br>
+                <input type="number" name="centrifuge_time_s" id="centrifuge_time" value="10"><br>
                 <label for="centrifuge_rcf">Centrifuge rcf:</label>
                 <input type="number" name="centrifuge_rcf" id="rectrifuge_r" value="2.5">
             </div>
+            <div id="lot_options" class="options">
+                <p>Lot Values:</p>
+                <label for="standard_lot">Standard Lot:</label>
+                <input type="text" name="standard_lot" id="standard_l" value="WM260319-1">
+                <label for="ninhydrin_lot">Ninhydrin Lot:</label>
+                <input type="text" name="ninhydrin_lot" id="ninhydrin_l" value="WM260316 ">
+                <label for="dilution_lot">Dilution Lot:</label>
+                <input type="text" name="dilution_lot" id="dilution_l" value="WM260316">
+            </div> 
         </div>
         <div id="lower_grid">
             <div id="button_container">
                 <input type="button" name="start_hw_bath" id="start_hw_bath" value="Start HW Bath">
                 <input type="button" name="start_cw_bath" id="start_cw_bath" value="Start CW Bath" disabled>
                 <input type="button" name="stop_cw_bath" id="stop_cw_bath" value="Stop CW Bath" disabled>
-                <input type="button" name="export_data" id="export_data" value="Export Data" disabled>
+                <input type="button" name="export_data" id="export_data" value="Copy Data" disabled>
             </div>
             <div id="timer_container">
                 <div id="timer_value">Time Left:<br>x</div>

@@ -3,7 +3,7 @@ body{
 }
 
 #options_container{
-  grid-template: auto / 200px 200px 200px;
+  grid-template: auto / 200px 200px 200px 200px;
   gap: 10px;
   display: grid;
 }

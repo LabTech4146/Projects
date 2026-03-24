@@ -79,13 +79,14 @@ function export_data_button_on_click() {
         hw_duration_s: hw_timer.get_elapsed_ms() / 1000,
         cw_duration_s: cw_timer.get_elapsed_ms() / 1000,
         date: new Date().toLocaleDateString("en-US"),
-        standard_lot: "260319-1WM",
-        dilution_lot: "260316WM",
-        ninhydrin_lot: "260330WM",
+        standard_lot: f_data.get("standard_lot"),
+        dilution_lot: f_data.get("dilution_lot"),
+        ninhydrin_lot: f_data.get("ninhydrin_lot"),
         centrifuge_time_s: f_data.get("centrifuge_time_s"),
         centrifuge_rcf: f_data.get("centrifuge_rcf"),
     };
     export_content_div.innerHTML = JSON.stringify(export_data);
+    navigator.clipboard.writeText(export_content_div.innerHTML);
     
 }
 
