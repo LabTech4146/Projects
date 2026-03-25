@@ -9,25 +9,39 @@ var hw_timer = new Timer();
 window.h = hw_timer;
 var cw_timer = new Timer();
 var hw_intended_duration_m, cw_intended_duration_m, countdown_elem, clock_value_elem;
+var s_lot_elem, n_lot_elem, d_lot_elem
 var alarm_audio = new Audio('./alarm.mp3');
 var alarm_t_minus_s = 30;
 var timeout_audio = new Audio('./timeout.mp3');
 
 document.addEventListener("DOMContentLoaded", () => {
+    
     hw_bath_start_button = document.getElementById("start_hw_bath");
     cw_bath_start_button = document.getElementById("start_cw_bath");
     cw_bath_stop_button = document.getElementById("stop_cw_bath");
-    export_data_button = document.getElementById("export_data")
+    export_data_button = document.getElementById("export_data");
     hw_duration = document.getElementById("hw_duration");
     cw_duration = document.getElementById("cw_duration");
     countdown_elem = document.getElementById("timer_value");
     clock_value_elem = document.getElementById("clock_value");
+    s_lot_elem = document.getElementById("standard_l");
+    n_lot_elem = document.getElementById("ninhydrin_l");
+    d_lot_elem = document.getElementById("dilution_l");
     form_elem = document.getElementById("ui_form");
     export_content_div = document.getElementById("export_content");
     hw_bath_start_button.onclick = hw_bath_start_button_on_click
     cw_bath_start_button.onclick = cw_bath_start_button_on_click
     cw_bath_stop_button.onclick = cw_bath_stop_button_on_click
     export_data_button.onclick = export_data_button_on_click
+
+    if(localStorage.hasOwnProperty("fan_timer")){
+
+        let previous_export_data = JSON.parse(localStorage.fan_timer);
+        s_lot_elem.value = previous_export_data.standard_lot;
+        n_lot_elem.value = previous_export_data.ninhydrin_lot;
+        d_lot_elem.value = previous_export_data.dilution_lot;
+
+    };
 });
 
 window.addEventListener("beforeunload", (event) => {  
@@ -89,6 +103,7 @@ function export_data_button_on_click() {
     };
     export_content_div.innerHTML = JSON.stringify(export_data);
     navigator.clipboard.writeText(export_content_div.innerHTML);
+    localStorage.setItem("fan_timer", export_content_div.innerHTML);
     
 }
 
