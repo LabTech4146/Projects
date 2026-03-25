@@ -75,6 +75,8 @@ function export_data_button_on_click() {
     let export_data = {
         hw_bath_temp: f_data.get('hw_temp'),
         cw_bath_temp: f_data.get('cw_temp'),
+        cw_initial_temp: f_data.get('cw_inital_temp'),
+        cw_final_temp: f_data.get('cw_final_temp'),
         ambient_temp: f_data.get('ambient_temp'),
         hw_duration_s: hw_timer.get_elapsed_ms() / 1000,
         cw_duration_s: cw_timer.get_elapsed_ms() / 1000,

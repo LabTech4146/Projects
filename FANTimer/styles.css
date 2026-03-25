@@ -27,7 +27,7 @@ body{
 }
 
 input[type=number]{
-  width: 50px;
+  max-width: 90%;
 }
 
 #lower_grid{
