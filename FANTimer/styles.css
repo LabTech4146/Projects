@@ -3,7 +3,7 @@ body{
 }
 
 #options_container{
-  grid-template: auto / 200px 200px 200px 200px;
+  grid-template: auto / 200px 200px 200px 200px 200px;
   gap: 10px;
   display: grid;
 }
@@ -55,6 +55,21 @@ p{
 
 input[type=button]{
   width: 200px;
+}
+
+.color_shift {
+  animation: 2s linear 0s infinite alternate color-shift;
+}
+
+
+@keyframes color-shift {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(180deg);
+  }
+
 }
 
 input.yellow {
