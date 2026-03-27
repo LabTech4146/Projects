@@ -9,7 +9,7 @@ var hw_timer = new Timer();
 window.h = hw_timer;
 var cw_timer = new Timer();
 var hw_intended_duration_m, cw_intended_duration_m, countdown_elem, clock_value_elem;
-var s_lot_elem, n_lot_elem, d_lot_elem, is_ten_minute_cw_alarm_elem
+var s_lot_elem, n_lot_elem, d_lot_elem, is_ten_minute_cw_alarm_elem, alarm_options_elem
 var alarm_audio = new Audio('./alarm.mp3');
 var alarm_t_minus_s = 30;
 var timeout_audio = new Audio('./timeout.mp3');
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     s_lot_elem = document.getElementById("standard_l");
     n_lot_elem = document.getElementById("ninhydrin_l");
     d_lot_elem = document.getElementById("dilution_l");
+    alarm_options_elem = document.getElementById("alarm_options");
     is_ten_minute_cw_alarm_elem = document.getElementById("ten_minute_cw_l");
     form_elem = document.getElementById("ui_form");
     export_content_div = document.getElementById("export_content");
@@ -73,7 +74,7 @@ function cw_bath_start_button_on_click() {
     clock_value_elem.innerHTML = `(${cw_timer.get_eta_clock()})`;
     setTimeout(() => {alarm_audio.play()}, cw_intended_duration_m * 1000 * 60 - (alarm_t_minus_s * 1000));
     if(is_ten_minute_cw_alarm_elem.checked && cw_intended_duration_m > 10){
-        setTimeout(() => {ten_minute_cw_bath_alarm_audio.play(); }, (cw_intended_duration_m * 1000 * 60) - (10 * 60 * 1000));
+        setTimeout(() => {ten_minute_cw_bath_alarm_audio.play(); alarm_options_elem.setAttribute("class", "color_shift"); }, (cw_intended_duration_m * 1000 * 60) - (10 * 60 * 1000));
     };
     hw_timer.stop();
     window_model.stop_hw_duration_updater();
