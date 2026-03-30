@@ -26,7 +26,7 @@ class Timer{
     }
     get_eta_clock() {
         let eta_time = new Date(this.eta);
-        return `${eta_time.getHours()}:${eta_time.getMinutes()}`
+        return eta_time.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
     }
 };
 
