@@ -35,6 +35,11 @@ input[type=number]{
   grid-template: 200px / 200px 200px;
 }
 
+textarea {
+  width: 180px;
+  height: 60px;
+}
+
 #timer_value, #clock_value{
   text-align: center;
   line-height: 50px;

@@ -106,6 +106,7 @@ function export_data_button_on_click() {
         ninhydrin_lot: f_data.get("ninhydrin_lot"),
         centrifuge_time_s: f_data.get("centrifuge_time_s"),
         centrifuge_rcf: f_data.get("centrifuge_rcf"),
+        notes: f_data.get('notes'),
     };
     export_content_div.innerHTML = JSON.stringify(export_data);
     navigator.clipboard.writeText(export_content_div.innerHTML);
